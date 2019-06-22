@@ -18,26 +18,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-            <!--android:src="@drawable/sticky_top"
-            android:scaleType="centerCrop"-->
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/sticky_top"
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/sticky_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sticky_top"/>
-
+            app:layout_constraintTop_toBottomOf="@id/sticky_top"
+            android:background="#F4F382"/>
 
         <ImageView
             android:id="@+id/sticky_bot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sticky_text"/>
-            <!--android:src="@drawable/sticky_bottom"
-            android:scaleType="centerCrop"/> -->
+            app:layout_constraintTop_toBottomOf="@id/sticky_text"
+            android:src="@drawable/sticky_bottom"
+            android:scaleType="centerCrop"/>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>
