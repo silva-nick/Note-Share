@@ -16,8 +16,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private List<CardView> bigData;
     private ItemClickListener clickListener;
 
-
     public NoteAdapter(List<CardView> dataSet){
+        super();
         bigData = dataSet;
     }
 
@@ -38,6 +38,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         return bigData.size();
     }
 
+    public void setClickListener(ItemClickListener listener){
+        this.clickListener = listener;
+    }
+
+    public int getPos(){
+        return 2;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public CardView cardView;
 
@@ -50,12 +58,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
         @Override
         public void onClick(View view) {
+            //does something
             if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
         }
-    }
-
-    public void setClickListener(ItemClickListener listener){
-        this.clickListener = listener;
     }
 
     public interface ItemClickListener {

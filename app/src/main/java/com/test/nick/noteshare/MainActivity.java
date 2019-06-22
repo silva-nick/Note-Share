@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
 
         adapter = new NoteAdapter(testList);
         recyclerView.setAdapter(adapter);
+        ((NoteAdapter)adapter).setClickListener(this);
     }
 
     public void addNote(View view){
