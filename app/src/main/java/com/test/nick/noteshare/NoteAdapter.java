@@ -18,7 +18,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private ArrayList<String> data;
     private ItemClickListener clickListener;
 
-    public NoteAdapter(List<CardView> dataSet){
+    public NoteAdapter(List<CardView> dataSet, ArrayList<String> words){
         super();
         bigData = dataSet;
         data = words;
