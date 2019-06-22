@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemClickListener{
     private static final String TAG = "MainActivity";
 
     private List<CardView> testList = new ArrayList<CardView>();
@@ -51,5 +51,10 @@ public class MainActivity extends AppCompatActivity {
         int insertIndex = testList.size();
         testList.add(insertIndex, newView);
         adapter.notifyItemInserted(insertIndex);
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.d(TAG, "onItemClick: position was clicked " + position);
     }
 }

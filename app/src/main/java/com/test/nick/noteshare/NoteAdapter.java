@@ -7,12 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private static final String TAG = "NoteAdapter";
     private List<CardView> bigData;
+    private ItemClickListener clickListener;
 
 
     public NoteAdapter(List<CardView> dataSet){
@@ -36,19 +38,27 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         return bigData.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public CardView cardView;
 
         public ViewHolder(CardView view){
             super(view);
             Log.d(TAG, "ViewHolder: " + view.toString());
             cardView = (CardView)view;
-            view.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View V){
-                    Log.d(TAG, "ViewHolder: Clicked view");
-                }
-            });
+            view.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
+        }
+    }
+
+    public void setClickListener(ItemClickListener listener){
+        this.clickListener = listener;
+    }
+
+    public interface ItemClickListener {
+        public void onItemClick(View view, int position);
     }
 }
