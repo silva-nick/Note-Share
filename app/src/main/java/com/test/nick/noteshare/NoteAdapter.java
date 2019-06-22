@@ -18,8 +18,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private ArrayList<String> data;
     private ItemClickListener clickListener;
 
-
-    NoteAdapter(List<CardView> dataSet, ArrayList<String> words){
+    public NoteAdapter(List<CardView> dataSet){
+        super();
         bigData = dataSet;
         data = words;
     }
@@ -42,6 +42,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         return data.size();
     }
 
+    public void setClickListener(ItemClickListener listener){
+        this.clickListener = listener;
+    }
+
+    public int getPos(){
+        return 2;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cardView;
         TextView text;
@@ -56,12 +64,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
         @Override
         public void onClick(View view) {
+            //does something
             if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
         }
-    }
-
-    public void setClickListener(ItemClickListener listener){
-        this.clickListener = listener;
     }
 
     public interface ItemClickListener {
