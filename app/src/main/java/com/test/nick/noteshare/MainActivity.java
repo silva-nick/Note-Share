@@ -6,6 +6,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
     private static final String TAG = "MainActivity";
 
     private List<CardView> testList = new ArrayList<CardView>();
+    private ArrayList<String> test = new ArrayList<>();
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -32,17 +34,19 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
 
         inflater = getLayoutInflater();
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
+        recyclerView = findViewById(R.id.recycle_view);
         recyclerView.setHasFixedSize(true);
 
         layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
-
         testList.add((CardView) LayoutInflater.from(this).inflate(R.layout.sticky_note, (ViewGroup) findViewById(R.id.recycle_view), false));
-
-        adapter = new NoteAdapter(testList);
+        for (int i = 0; i < 100; i++) {
+            test.add(String.valueOf(i));
+        }
+        adapter = new NoteAdapter(testList, test);
         recyclerView.setAdapter(adapter);
+        ((NoteAdapter)adapter).setClickListener(this);
     }
 
     public void addNote(View view){
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
         CardView newView = (CardView) LayoutInflater.from(this).inflate(R.layout.sticky_note, (ViewGroup) findViewById(R.id.recycle_view), false);
         int insertIndex = testList.size();
         testList.add(insertIndex, newView);
+        test.add(insertIndex, "");
         adapter.notifyItemInserted(insertIndex);
     }
 

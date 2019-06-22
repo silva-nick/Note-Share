@@ -7,18 +7,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private static final String TAG = "NoteAdapter";
     private List<CardView> bigData;
+    private ArrayList<String> data;
     private ItemClickListener clickListener;
 
-
-    public NoteAdapter(List<CardView> dataSet){
+    public NoteAdapter(List<CardView> dataSet, ArrayList<String> words){
+        super();
         bigData = dataSet;
+        data = words;
     }
 
     @NonNull
@@ -30,32 +33,40 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.cardView = bigData.get(i);
+        viewHolder.text.setText(data.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return bigData.size();
+        //return bigData.size();
+        return data.size();
+    }
+
+    public void setClickListener(ItemClickListener listener){
+        this.clickListener = listener;
+    }
+
+    public int getPos(){
+        return 2;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public CardView cardView;
+        CardView cardView;
+        TextView text;
 
-        public ViewHolder(CardView view){
+        ViewHolder(CardView view){
             super(view);
             Log.d(TAG, "ViewHolder: " + view.toString());
-            cardView = (CardView)view;
+            cardView = view;
+            text = cardView.findViewById(R.id.sticky_text);
             view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
+            //does something
             if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
         }
-    }
-
-    public void setClickListener(ItemClickListener listener){
-        this.clickListener = listener;
     }
 
     public interface ItemClickListener {
