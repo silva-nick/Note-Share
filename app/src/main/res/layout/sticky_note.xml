@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintRight_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sticky_top"
-            android:background="#F4F382"/>
+            android:background="@color/colorSticky"/>
 
         <ImageView
             android:id="@+id/sticky_bot"
