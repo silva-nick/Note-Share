@@ -1,5 +1,7 @@
 package com.test.nick.noteshare;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -7,6 +9,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.transition.AutoTransition;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Scene;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,8 +67,20 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
         adapter.notifyItemInserted(insertIndex);
     }
 
+    //Called on screen click, moves to HomeActivity
+    public void leaveActivity(View view, int pos){
+        Intent intent = new Intent(this, StickyEditActivity.class);
+
+        //Errors out
+        //Transition exitTransition = TransitionInflater.from(this).inflateTransition(R.transition.exit_transition);
+        //getWindow().setExitTransition(exitTransition);
+        getWindow().setExitTransition(new AutoTransition());
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+    }
+
     @Override
     public void onItemClick(View view, int position) {
         Log.d(TAG, "onItemClick: position was clicked " + position);
+        leaveActivity(view, position);
     }
 }
