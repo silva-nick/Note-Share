@@ -2,4 +2,6 @@
     <string name="app_name">Note Share</string>
     <string name="title">Title</string>
     <string name="title_activity_sticky_edit">StickyEditActivity</string>
+    <string name="body">Body</string>
+    <string name="back_button"><![CDATA[<-]]></string>
 </resources>
