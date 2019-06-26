@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemClickListener{
+public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemClickListener, NoteAdapter.ItemHoldListener{
     private static final String TAG = "MainActivity";
 
     private List<CardView> testList = new ArrayList<CardView>();
@@ -82,5 +82,11 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
     public void onItemClick(View view, int position) {
         Log.d(TAG, "onItemClick: position was clicked " + position);
         leaveActivity(view, position);
+    }
+
+    @Override
+    public void onItemHold(View view, int position){
+        Log.d(TAG, "onItemClick: position was held" + position);
+        //use nfc to share note
     }
 }
