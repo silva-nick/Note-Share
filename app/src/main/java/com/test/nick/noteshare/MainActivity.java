@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
     @Override
     public void onItemTap(View view, int position) {
-        Log.d(TAG, "onItemTap: ");
+        Log.d(TAG, "onItemTap: " + position);
         leaveActivity(view, position);
     }
 
