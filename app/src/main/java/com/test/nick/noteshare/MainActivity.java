@@ -18,13 +18,14 @@ import android.transition.TransitionInflater;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemClickListener, NoteAdapter.ItemHoldListener{
+public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemClickListener, NoteAdapter.ItemHoldListener, NoteAdapter.ItemTouchListener{
     private static final String TAG = "MainActivity";
 
     private List<CardView> testList = new ArrayList<CardView>();
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
         adapter = new NoteAdapter(testList, test);
         recyclerView.setAdapter(adapter);
         ((NoteAdapter)adapter).setClickListener(this);
+        ((NoteAdapter)adapter).setLongClickListener(this);
+        ((NoteAdapter)adapter).setTouchListener(this);
     }
 
     public void addNote(View view){
@@ -88,5 +91,11 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
     public void onItemHold(View view, int position){
         Log.d(TAG, "onItemClick: position was held" + position);
         //use nfc to share note
+    }
+
+    @Override
+    public void onItemTouch(View view, MotionEvent event, int position){
+        Log.d(TAG, "onItemTouch: position was touched " + position);
+        //switch statement
     }
 }

@@ -5,6 +5,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private ArrayList<String> data;
     private ItemClickListener clickListener;
     private ItemHoldListener holdListener;
+    private ItemTouchListener touchListener;
 
     public NoteAdapter(List<CardView> dataSet, ArrayList<String> words){
         super();
@@ -51,7 +53,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         this.holdListener = listener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public void setTouchListener(ItemTouchListener listener){
+        this.touchListener = listener;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener{
         CardView cardView;
         TextView text;
 
@@ -62,6 +68,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             text = cardView.findViewById(R.id.sticky_text);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
+            view.setOnTouchListener(this);
         }
 
         @Override
@@ -74,6 +81,16 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             if(holdListener != null) holdListener.onItemHold(view, getAdapterPosition());
             return true;
         }
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event){
+            if(touchListener != null) touchListener.onItemTouch(view, event, getAdapterPosition());
+            return true;
+        }
+    }
+
+    public interface ItemTouchListener{
+        void onItemTouch(View view, MotionEvent event, int position);
     }
 
     public interface ItemClickListener {
