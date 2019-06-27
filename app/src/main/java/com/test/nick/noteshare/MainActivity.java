@@ -25,13 +25,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemClickListener, NoteAdapter.ItemHoldListener, NoteAdapter.ItemTouchListener{
+public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemListener{
     private static final String TAG = "MainActivity";
 
     private List<CardView> testList = new ArrayList<CardView>();
     private ArrayList<String> test = new ArrayList<>();
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private NoteAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
     private LayoutInflater inflater;
@@ -54,11 +54,10 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
         for (int i = 0; i < 100; i++) {
             test.add(String.valueOf(i));
         }
-        adapter = new NoteAdapter(testList, test);
+        adapter = new NoteAdapter(testList, test, this);
         recyclerView.setAdapter(adapter);
-        ((NoteAdapter)adapter).setClickListener(this);
-        ((NoteAdapter)adapter).setLongClickListener(this);
-        ((NoteAdapter)adapter).setTouchListener(this);
+        adapter.setListeners(this);
+
     }
 
     public void addNote(View view){
@@ -81,21 +80,22 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemC
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
+
     @Override
-    public void onItemClick(View view, int position) {
-        Log.d(TAG, "onItemClick: position was clicked " + position);
+    public void onItemTap(View view, int position) {
+        Log.d(TAG, "onItemTap: ");
         leaveActivity(view, position);
     }
 
     @Override
-    public void onItemHold(View view, int position){
-        Log.d(TAG, "onItemClick: position was held" + position);
-        //use nfc to share note
+    public void onItemFling(View view, int position, float xVelocity) {
+        Log.d(TAG, "onItemFling: ");
+        //animation + delete note
     }
 
     @Override
-    public void onItemTouch(View view, MotionEvent event, int position){
-        Log.d(TAG, "onItemTouch: position was touched " + position);
-        //switch statement
+    public void onItemHold(View view, int position) {
+        Log.d(TAG, "onItemHold: ");
+        //use nfc to share notes
     }
 }

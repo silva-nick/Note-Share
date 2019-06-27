@@ -1,9 +1,12 @@
 package com.test.nick.noteshare;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,16 +18,17 @@ import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private static final String TAG = "NoteAdapter";
+    private Context context;
     private List<CardView> bigData;
     private ArrayList<String> data;
-    private ItemClickListener clickListener;
-    private ItemHoldListener holdListener;
-    private ItemTouchListener touchListener;
+    private GestureDetectorCompat gestureDetector;
+    private ItemListener itemListener;
 
-    public NoteAdapter(List<CardView> dataSet, ArrayList<String> words){
+    public NoteAdapter(List<CardView> dataSet, ArrayList<String> words, Context parentContext){
         super();
         bigData = dataSet;
         data = words;
+        context = parentContext;
     }
 
     @NonNull
@@ -45,19 +49,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         return data.size();
     }
 
-    public void setClickListener(ItemClickListener listener){
-        this.clickListener = listener;
-    }
-
-    public void setLongClickListener(ItemHoldListener listener){
-        this.holdListener = listener;
-    }
-
-    public void setTouchListener(ItemTouchListener listener){
-        this.touchListener = listener;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
         CardView cardView;
         TextView text;
 
@@ -66,37 +58,57 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             Log.d(TAG, "ViewHolder: " + view.toString());
             cardView = view;
             text = cardView.findViewById(R.id.sticky_text);
-            view.setOnClickListener(this);
-            view.setOnLongClickListener(this);
+            gestureDetector = new GestureDetectorCompat(context, new GestureListener(view, getAdapterPosition()));
             view.setOnTouchListener(this);
         }
 
         @Override
-        public void onClick(View view) {
-            if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
-        }
-
-        @Override
-        public boolean onLongClick(View view){
-            if(holdListener != null) holdListener.onItemHold(view, getAdapterPosition());
-            return true;
-        }
-
-        @Override
         public boolean onTouch(View view, MotionEvent event){
-            if(touchListener != null) touchListener.onItemTouch(view, event, getAdapterPosition());
+            gestureDetector.onTouchEvent(event);
             return true;
         }
     }
 
-    public interface ItemTouchListener{
-        void onItemTouch(View view, MotionEvent event, int position);
+    public void setListeners(ItemListener iListener){
+        this.itemListener = iListener;
     }
 
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-    public interface ItemHoldListener{
+    public interface ItemListener{
+        void onItemTap(View view, int position);
+        void onItemFling(View view, int position, float xVelocity);
         void onItemHold(View view, int position);
+    }
+
+    private class GestureListener extends android.view.GestureDetector.SimpleOnGestureListener{
+        private View view;
+        private int position;
+
+        private GestureListener(View v, int pos){
+            super();
+            view = v;
+            position = pos;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e){
+            Log.d(TAG, "OnDown: " + e.toString());
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e){
+            itemListener.onItemTap(view, position);
+            return true;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e){
+            itemListener.onItemHold(view, position);
+        }
+
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            itemListener.onItemFling(view, position, velocityX);
+            return true;
+        }
     }
 }
