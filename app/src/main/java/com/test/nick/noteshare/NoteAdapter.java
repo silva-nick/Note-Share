@@ -58,13 +58,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             Log.d(TAG, "ViewHolder: " + view.toString());
             cardView = view;
             text = cardView.findViewById(R.id.sticky_text);
-            gestureDetector = new GestureDetectorCompat(context, new GestureListener(view, getAdapterPosition()));
+            gestureDetector = new GestureDetectorCompat(context, new GestureListener());
             view.setOnTouchListener(this);
         }
 
         @Override
         public boolean onTouch(View view, MotionEvent event){
             gestureDetector.onTouchEvent(event);
+            itemListener.sendEvent(view, getAdapterPosition());
             return true;
         }
     }
@@ -74,40 +75,33 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     }
 
     public interface ItemListener{
-        void onItemTap(View view, int position);
-        void onItemFling(View view, int position, float xVelocity);
-        void onItemHold(View view, int position);
+        void onItemTap();
+        void onItemFling(float xVelocity);
+        void onItemHold();
+        void sendEvent(View view, int position);
     }
 
     private class GestureListener extends android.view.GestureDetector.SimpleOnGestureListener{
-        private View view;
-        private int position;
-
-        private GestureListener(View v, int pos){
-            super();
-            view = v;
-            position = pos;
-        }
 
         @Override
         public boolean onDown(MotionEvent e){
-            Log.d(TAG, "OnDown: " + e.toString());
+            Log.d(TAG, "OnDown: ");
             return true;
         }
 
         @Override
         public boolean onSingleTapUp(MotionEvent e){
-            itemListener.onItemTap(view, position);
+            itemListener.onItemTap();
             return true;
         }
 
         @Override
         public void onLongPress(MotionEvent e){
-            itemListener.onItemHold(view, position);
+            itemListener.onItemHold();
         }
 
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            itemListener.onItemFling(view, position, velocityX);
+            itemListener.onItemFling(velocityX);
             return true;
         }
     }

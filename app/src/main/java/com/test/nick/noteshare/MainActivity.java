@@ -33,16 +33,13 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     private RecyclerView recyclerView;
     private NoteAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-
-    private LayoutInflater inflater;
+    private int focusPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: starting program");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        inflater = getLayoutInflater();
 
         recyclerView = findViewById(R.id.recycle_view);
         recyclerView.setHasFixedSize(true);
@@ -69,8 +66,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         adapter.notifyItemInserted(insertIndex);
     }
 
-    //Called on screen click, moves to HomeActivity
-    public void leaveActivity(View view, int pos){
+    public void leaveActivity(){
         Intent intent = new Intent(this, StickyEditActivity.class);
 
         //Errors out
@@ -82,20 +78,26 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
 
     @Override
-    public void onItemTap(View view, int position) {
-        Log.d(TAG, "onItemTap: " + position);
-        leaveActivity(view, position);
+    public void onItemTap() {
+        Log.d(TAG, "onItemTap: ");
+        leaveActivity();
     }
 
     @Override
-    public void onItemFling(View view, int position, float xVelocity) {
-        Log.d(TAG, "onItemFling: ");
+    public void onItemFling(float xVelocity) {
+        Log.d(TAG, "onItemFling: " + xVelocity);
         //animation + delete note
     }
 
     @Override
-    public void onItemHold(View view, int position) {
+    public void onItemHold() {
         Log.d(TAG, "onItemHold: ");
         //use nfc to share notes
+    }
+
+    @Override
+    public void sendEvent(View v, int pos){
+        Log.d(TAG, "sendEvent: " + pos);
+        this.focusPosition = pos;
     }
 }
