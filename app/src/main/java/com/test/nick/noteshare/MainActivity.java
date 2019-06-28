@@ -2,6 +2,8 @@ package com.test.nick.noteshare;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     private NoteAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private int focusPosition;
+    private View focusView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +72,8 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     public void leaveActivity(){
         Intent intent = new Intent(this, StickyEditActivity.class);
 
-        //Errors out
-        //Transition exitTransition = TransitionInflater.from(this).inflateTransition(R.transition.exit_transition);
-        //getWindow().setExitTransition(exitTransition);
-        getWindow().setExitTransition(new AutoTransition());
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        ActivityOptionsCompat option = ActivityOptionsCompat.makeScaleUpAnimation(focusView, 0, 0, focusView.getWidth(), focusView.getHeight());
+        ActivityCompat.startActivity(this, intent, option.toBundle());
     }
 
 
@@ -99,5 +99,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     public void sendEvent(View v, int pos){
         Log.d(TAG, "sendEvent: " + pos);
         this.focusPosition = pos;
+        this.focusView = v;
     }
 }

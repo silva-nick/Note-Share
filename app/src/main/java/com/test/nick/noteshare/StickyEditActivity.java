@@ -17,7 +17,6 @@ public class StickyEditActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().setEnterTransition(new Explode());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sticky_edit);
         Button backButton = findViewById(R.id.back_button);
@@ -31,6 +30,8 @@ public class StickyEditActivity extends AppCompatActivity {
 
     private void leaveActivity() {
         Intent intent = new Intent(this, MainActivity.class);
+        finish();
+        overridePendingTransition(0 ,R.transition.scale_down);
         startActivity(intent);
     }
 }
