@@ -19,14 +19,12 @@ import java.util.List;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private static final String TAG = "NoteAdapter";
     private Context context;
-    private List<CardView> bigData;
     private ArrayList<String> data;
     private GestureDetectorCompat gestureDetector;
     private ItemListener itemListener;
 
-    public NoteAdapter(List<CardView> dataSet, ArrayList<String> words, Context parentContext){
+    public NoteAdapter(ArrayList<String> words, Context parentContext){
         super();
-        bigData = dataSet;
         data = words;
         context = parentContext;
     }

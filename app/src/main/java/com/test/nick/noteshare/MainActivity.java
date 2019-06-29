@@ -33,7 +33,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemListener{
     private static final String TAG = "MainActivity";
 
-    private List<CardView> testList = new ArrayList<CardView>();
     private ArrayList<String> test = new ArrayList<>();
     private NoteAdapter adapter;
     private int focusPosition;
@@ -51,12 +50,11 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
-        testList.add((CardView) LayoutInflater.from(this)
-                .inflate(R.layout.sticky_note, (ViewGroup) findViewById(R.id.recycle_view), false));
+
         for (int i = 0; i < 100; i++) {
             test.add(String.valueOf(i));
         }
-        adapter = new NoteAdapter(testList, test, this);
+        adapter = new NoteAdapter(test, this);
         recyclerView.setAdapter(adapter);
         adapter.setListeners(this);
     }
@@ -78,12 +76,15 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
     public void addNote(View view){
         Log.d(TAG, "addNote: Floating action button pressed");
-        CardView newView = (CardView) LayoutInflater.from(this)
-                .inflate(R.layout.sticky_note, (ViewGroup) findViewById(R.id.recycle_view), false);
-        int insertIndex = testList.size();
-        testList.add(insertIndex, newView);
+
+        int insertIndex = test.size();
         test.add(insertIndex, "");
         adapter.notifyItemInserted(insertIndex);
+    }
+
+    public void removeNote(int removeIndex){
+        test.remove(removeIndex);
+        adapter.notifyItemRemoved(removeIndex);
     }
 
     public void leaveActivity(){
@@ -104,6 +105,14 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     @Override
     public void onItemFling(float xVelocity) {
         Log.d(TAG, "onItemFling: " + xVelocity);
+
+        AnimatorSet set = new AnimatorSet();
+        set.play(ObjectAnimator.ofFloat(focusView, View.X, xVelocity));
+        set.setDuration(2000);
+        set.setInterpolator(new DecelerateInterpolator());
+        set.start();
+
+        removeNote(focusPosition);
         //animation + delete note
     }
 
