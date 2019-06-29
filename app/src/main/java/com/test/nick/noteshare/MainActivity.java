@@ -1,5 +1,7 @@
 package com.test.nick.noteshare;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
@@ -23,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +35,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
     private List<CardView> testList = new ArrayList<CardView>();
     private ArrayList<String> test = new ArrayList<>();
-    private RecyclerView recyclerView;
     private NoteAdapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
     private int focusPosition;
     private View focusView;
 
@@ -44,25 +45,41 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.recycle_view);
+        RecyclerView recyclerView = findViewById(R.id.recycle_view);
         recyclerView.setHasFixedSize(true);
 
-        layoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
-        testList.add((CardView) LayoutInflater.from(this).inflate(R.layout.sticky_note, (ViewGroup) findViewById(R.id.recycle_view), false));
+        testList.add((CardView) LayoutInflater.from(this)
+                .inflate(R.layout.sticky_note, (ViewGroup) findViewById(R.id.recycle_view), false));
         for (int i = 0; i < 100; i++) {
             test.add(String.valueOf(i));
         }
         adapter = new NoteAdapter(testList, test, this);
         recyclerView.setAdapter(adapter);
         adapter.setListeners(this);
+    }
 
+    @Override
+    protected void onResume(){
+        Log.d(TAG, "onResume:" + focusView);
+
+        if(focusView != null) {
+            AnimatorSet resumeSet = new AnimatorSet();
+            resumeSet.play(ObjectAnimator.ofFloat(focusView, View.X, 0))
+                    .with(ObjectAnimator.ofFloat(focusView, View.Y, 0));
+            resumeSet.setDuration(1000);
+            resumeSet.setInterpolator(new DecelerateInterpolator());
+            resumeSet.start();
+        }
+        super.onResume();
     }
 
     public void addNote(View view){
         Log.d(TAG, "addNote: Floating action button pressed");
-        CardView newView = (CardView) LayoutInflater.from(this).inflate(R.layout.sticky_note, (ViewGroup) findViewById(R.id.recycle_view), false);
+        CardView newView = (CardView) LayoutInflater.from(this)
+                .inflate(R.layout.sticky_note, (ViewGroup) findViewById(R.id.recycle_view), false);
         int insertIndex = testList.size();
         testList.add(insertIndex, newView);
         test.add(insertIndex, "");
@@ -72,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     public void leaveActivity(){
         Intent intent = new Intent(this, StickyEditActivity.class);
 
-        ActivityOptionsCompat option = ActivityOptionsCompat.makeScaleUpAnimation(focusView, 0, 0, focusView.getWidth(), focusView.getHeight());
+        ActivityOptionsCompat option = ActivityOptionsCompat
+                .makeScaleUpAnimation(focusView, 0, 0, focusView.getWidth(), focusView.getHeight());
         ActivityCompat.startActivity(this, intent, option.toBundle());
     }
 

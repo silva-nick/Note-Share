@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.transition.ChangeBounds;
 import android.transition.Explode;
 import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -19,6 +20,7 @@ public class StickyEditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sticky_edit);
+
         Button backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -30,8 +32,9 @@ public class StickyEditActivity extends AppCompatActivity {
 
     private void leaveActivity() {
         Intent intent = new Intent(this, MainActivity.class);
-        finish();
-        overridePendingTransition(0 ,R.transition.scale_down);
+
+        //overridePendingTransition(0 ,R.transition.scale_down);
+        overridePendingTransition(0,0);
         startActivity(intent);
     }
 }
