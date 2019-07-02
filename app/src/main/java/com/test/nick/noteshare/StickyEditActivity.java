@@ -33,8 +33,8 @@ public class StickyEditActivity extends AppCompatActivity {
     private void leaveActivity() {
         Intent intent = new Intent(this, MainActivity.class);
 
-        //overridePendingTransition(0 ,R.transition.scale_down);
-        overridePendingTransition(0,0);
+        overridePendingTransition(0 ,R.transition.scale_down);
+        //overridePendingTransition(0,0);
         startActivity(intent);
     }
 }

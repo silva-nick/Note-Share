@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemListener{
     private static final String TAG = "MainActivity";
@@ -50,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
-
         for (int i = 0; i < 100; i++) {
             test.add(String.valueOf(i));
         }
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     @Override
     protected void onResume(){
         Log.d(TAG, "onResume:" + focusView);
-
+        //when going back to main act, animates card
         if(focusView != null) {
             AnimatorSet resumeSet = new AnimatorSet();
             resumeSet.play(ObjectAnimator.ofFloat(focusView, View.X, 0))
@@ -106,13 +104,16 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     public void onItemFling(float xVelocity) {
         Log.d(TAG, "onItemFling: " + xVelocity);
 
+        View copyView = focusView;
+        removeNote(focusPosition);
+
         AnimatorSet set = new AnimatorSet();
-        set.play(ObjectAnimator.ofFloat(focusView, View.X, xVelocity));
+        set.play(ObjectAnimator.ofFloat(copyView, View.X, xVelocity));
         set.setDuration(2000);
         set.setInterpolator(new DecelerateInterpolator());
         set.start();
+        set.reverse();
 
-        removeNote(focusPosition);
         //animation + delete note
     }
 

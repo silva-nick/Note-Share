@@ -8,8 +8,8 @@
         android:pivotX="5%p"
         android:pivotY="15%p"
         android:duration="175"/>
-    <alpha
+<!--    <alpha
         android:fromAlpha="1.0"
         android:toAlpha=".2"
-        android:duration="200"/>
+        android:duration="200"/> -->
 </set>

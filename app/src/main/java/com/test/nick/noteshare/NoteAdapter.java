@@ -62,6 +62,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
         @Override
         public boolean onTouch(View view, MotionEvent event){
+            Log.d(TAG, "onTouch: " + view.equals(cardView));
             gestureDetector.onTouchEvent(event);
             itemListener.sendEvent(view, getAdapterPosition());
             return true;
