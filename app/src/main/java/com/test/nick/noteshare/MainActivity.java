@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     public void addNote(View view){
         Log.d(TAG, "addNote: Floating action button pressed");
 
-        int insertIndex = test.size();
+        int insertIndex = 0;
         test.add(insertIndex, "");
         adapter.notifyItemInserted(insertIndex);
     }
@@ -112,16 +112,14 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     public void onItemFling(float xVelocity) {
         Log.d(TAG, "onItemFling: " + xVelocity);
 
-        View copyView = focusView;
-        removeNote(focusPosition);
-
         AnimatorSet set = new AnimatorSet();
-        set.play(ObjectAnimator.ofFloat(copyView, View.X, xVelocity));
-        set.setDuration(2000);
+        set.play(ObjectAnimator.ofFloat(focusView, View.X, xVelocity/2));
+        set.setDuration(1000);
         set.setInterpolator(new DecelerateInterpolator());
         set.start();
         set.reverse();
 
+        removeNote(focusPosition);
         //animation + delete note
     }
 

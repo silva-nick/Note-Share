@@ -32,7 +32,6 @@ public class StickyEditActivity extends AppCompatActivity {
 
     private void leaveActivity() {
 
-        overridePendingTransition(0 ,R.transition.scale_down);
         Intent sendData = new Intent();
         sendData.putExtra("new_title", "whatever is changed");
         sendData.putExtra("new_body", "whatever is changed");
