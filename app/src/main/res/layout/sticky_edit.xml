@@ -8,7 +8,7 @@
     android:background="@color/transparent">
 
     <Button
-        android:id="@+id/back_button"
+        android:id="@+id/sticky_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="136dp"
@@ -31,27 +31,29 @@
             android:layout_gravity="top"/>
 
         <EditText
-            android:id="@+id/title_text"
+            android:id="@+id/sticky_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:textSize="32sp"
-            android:inputType="textMultiLine|textCapSentences"
-            android:text="@string/title"
+            android:inputType="textCapSentences"
+            android:hint="@string/title"
+            android:textColorHint="@color/hintText"
             android:background="@color/colorSticky"
             android:layout_gravity="bottom"/>
 
     </FrameLayout>
 
     <EditText
-        android:id="@+id/body_text"
+        android:id="@+id/sticky_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="12dp"
         android:textAlignment="gravity"
         android:gravity="top"
         android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
-        android:text="@string/body"
+        android:hint="@string/body"
+        android:textColorHint="@color/hintText"
         android:background="@color/colorSticky"
         android:layout_weight="1"
         android:imeOptions=""/>

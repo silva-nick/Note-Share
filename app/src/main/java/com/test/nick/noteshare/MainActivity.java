@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         //if the codes match the successcode, then changes have been made and the local data should be updated via data from the intent
+        if (resultCode == RESULT_OK){
+            ((TextView)findViewById(R.id.title_text)).setText(data.getStringExtra("new_title"));
+        }
     }
 
     @Override

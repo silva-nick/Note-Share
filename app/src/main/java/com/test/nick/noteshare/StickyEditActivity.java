@@ -13,6 +13,7 @@ import android.transition.TransitionInflater;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class StickyEditActivity extends AppCompatActivity {
 
@@ -21,7 +22,7 @@ public class StickyEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sticky_edit);
 
-        Button backButton = findViewById(R.id.back_button);
+        Button backButton = findViewById(R.id.sticky_back);
         backButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -31,12 +32,14 @@ public class StickyEditActivity extends AppCompatActivity {
     }
 
     private void leaveActivity() {
+        EditText title = findViewById(R.id.sticky_title);
+        EditText body = findViewById(R.id.sticky_body);
 
         Intent sendData = new Intent();
-        sendData.putExtra("new_title", "whatever is changed");
-        sendData.putExtra("new_body", "whatever is changed");
+        sendData.putExtra("new_title", title.getText().toString());
+        sendData.putExtra("new_body", body.getText().toString());
 
-        setResult(69, sendData);
+        setResult(RESULT_OK, sendData);
         finish();
     }
 }
