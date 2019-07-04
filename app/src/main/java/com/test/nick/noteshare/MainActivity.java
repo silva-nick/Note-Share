@@ -58,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+
+    }
+
+    /*@Override
     protected void onResume(){
         Log.d(TAG, "onResume:" + focusView);
         //when going back to main act, animates card
@@ -70,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             resumeSet.start();
         }
         super.onResume();
-    }
+    }*/
 
     public void addNote(View view){
         Log.d(TAG, "addNote: Floating action button pressed");
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
         ActivityOptionsCompat option = ActivityOptionsCompat
                 .makeScaleUpAnimation(focusView, 0, 0, focusView.getWidth(), focusView.getHeight());
-        ActivityCompat.startActivity(this, intent, option.toBundle());
+        ActivityCompat.startActivityForResult( this, intent, 69, option.toBundle());
     }
 
 

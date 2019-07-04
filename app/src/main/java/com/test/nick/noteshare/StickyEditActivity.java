@@ -31,10 +31,13 @@ public class StickyEditActivity extends AppCompatActivity {
     }
 
     private void leaveActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
 
         overridePendingTransition(0 ,R.transition.scale_down);
-        //overridePendingTransition(0,0);
-        startActivity(intent);
+        Intent sendData = new Intent();
+        sendData.putExtra("new_title", "whatever is changed");
+        sendData.putExtra("new_body", "whatever is changed");
+
+        setResult(69, sendData);
+        finish();
     }
 }
