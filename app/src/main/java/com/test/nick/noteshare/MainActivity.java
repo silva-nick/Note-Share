@@ -2,6 +2,7 @@ package com.test.nick.noteshare;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
@@ -25,9 +26,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemListener{
     private static final String TAG = "MainActivity";
@@ -62,20 +65,36 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
     }
 
-    /*@Override
+    @Override
     protected void onResume(){
         Log.d(TAG, "onResume:" + focusView);
         //when going back to main act, animates card
         if(focusView != null) {
-            AnimatorSet resumeSet = new AnimatorSet();
-            resumeSet.play(ObjectAnimator.ofFloat(focusView, View.X, 0))
-                    .with(ObjectAnimator.ofFloat(focusView, View.Y, 0));
-            resumeSet.setDuration(1000);
-            resumeSet.setInterpolator(new DecelerateInterpolator());
-            resumeSet.start();
+            float startX = focusView.getX();
+            float startY = focusView.getY();
+
+            PropertyValuesHolder x1 = PropertyValuesHolder.ofFloat(View.X, 0f);
+            PropertyValuesHolder y1 = PropertyValuesHolder.ofFloat(View.Y, 0f);
+            PropertyValuesHolder x1Scale = PropertyValuesHolder.ofFloat(View.SCALE_X, 2f);
+            PropertyValuesHolder y1Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, 10f);
+            ObjectAnimator objectAnimator1 = ObjectAnimator.ofPropertyValuesHolder(focusView, x1, y1, x1Scale, y1Scale);
+            objectAnimator1.setDuration(0);
+
+            PropertyValuesHolder x2 = PropertyValuesHolder.ofFloat(View.X, startX);
+            PropertyValuesHolder y2 = PropertyValuesHolder.ofFloat(View.Y, startY);
+            PropertyValuesHolder x2Scale = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f);
+            PropertyValuesHolder y2Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f);
+            ObjectAnimator objectAnimator2 = ObjectAnimator.ofPropertyValuesHolder(focusView, x2, y2, x2Scale, y2Scale);
+            objectAnimator2.setDuration(500);
+            objectAnimator2.setStartDelay(100);
+            objectAnimator2.setInterpolator(new DecelerateInterpolator());
+
+            AnimatorSet sequenceAnimator = new AnimatorSet();
+            sequenceAnimator.playSequentially(objectAnimator1, objectAnimator2);
+            sequenceAnimator.start();
         }
         super.onResume();
-    }*/
+    }
 
     public void addNote(View view){
         Log.d(TAG, "addNote: Floating action button pressed");
