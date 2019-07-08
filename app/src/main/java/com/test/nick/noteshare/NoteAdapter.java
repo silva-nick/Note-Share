@@ -31,19 +31,35 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        CardView v = (CardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.sticky_note, viewGroup, false);
-        return new ViewHolder(v);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
+        switch (type){
+            case 0:
+                return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.check_note, viewGroup, false));
+            case 1:
+                return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.sticky_note, viewGroup, false));
+            default:
+                return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.sticky_note, viewGroup, false));
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.text.setText(data.get(i));
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int index) {
+        /*if(data.get(i).equals("1")){
+            viewHolder.cardView = (CardView) View.inflate(context, R.layout.check_note, null);
+
+        } else {
+            viewHolder.cardView = (CardView) View.inflate(context, R.layout.sticky_note, null);
+        }*/
+        viewHolder.text.setText(data.get(index));
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return data.get(position).equals("1") ? 0 : 1;
     }
 
     @Override
     public int getItemCount() {
-        //return bigData.size();
         return data.size();
     }
 
@@ -52,6 +68,28 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         TextView text;
 
         ViewHolder(CardView view){
+            super(view);
+            Log.d(TAG, "ViewHolder: " + view.toString());
+            cardView = view;
+            text = cardView.findViewById(R.id.sticky_text);
+            gestureDetector = new GestureDetectorCompat(context, new GestureListener());
+            view.setOnTouchListener(this);
+        }
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event){
+            Log.d(TAG, "onTouch: " + view.equals(cardView));
+            gestureDetector.onTouchEvent(event);
+            itemListener.sendEvent(view, getAdapterPosition());
+            return true;
+        }
+    }
+
+    public class ViewHolder1 extends RecyclerView.ViewHolder implements View.OnTouchListener{
+        CardView cardView;
+        TextView text;
+
+        ViewHolder1(CardView view){
             super(view);
             Log.d(TAG, "ViewHolder: " + view.toString());
             cardView = view;

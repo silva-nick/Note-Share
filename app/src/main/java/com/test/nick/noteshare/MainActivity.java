@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             PropertyValuesHolder x1 = PropertyValuesHolder.ofFloat(View.X, 0f);
             PropertyValuesHolder y1 = PropertyValuesHolder.ofFloat(View.Y, 0f);
             PropertyValuesHolder x1Scale = PropertyValuesHolder.ofFloat(View.SCALE_X, 2f);
-            PropertyValuesHolder y1Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, 10f);
+            PropertyValuesHolder y1Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, 15f);
             ObjectAnimator objectAnimator1 = ObjectAnimator.ofPropertyValuesHolder(focusView, x1, y1, x1Scale, y1Scale);
             objectAnimator1.setDuration(0);
 
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             PropertyValuesHolder x2Scale = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f);
             PropertyValuesHolder y2Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f);
             ObjectAnimator objectAnimator2 = ObjectAnimator.ofPropertyValuesHolder(focusView, x2, y2, x2Scale, y2Scale);
-            objectAnimator2.setDuration(500);
+            objectAnimator2.setDuration(400);
             objectAnimator2.setStartDelay(100);
             objectAnimator2.setInterpolator(new DecelerateInterpolator());
 
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             @Override
             public void onClick(View v){
                 //add stickynote and append to text
-                test.add(insertIndex, "");
+                test.add(insertIndex, "fuck me");
                 adapter.notifyItemInserted(insertIndex);
                 //writeRead();
                 layout.removeViews(layout.indexOfChild(v), 3);
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             @Override
             public void onClick(View v){
                 //add checknote and append to text
-                test.add(insertIndex, "");
+                test.add(insertIndex, "1");
                 adapter.notifyItemInserted(insertIndex);
                 //writeRead();
                 layout.removeViews(layout.indexOfChild(v) - 1, 3);
