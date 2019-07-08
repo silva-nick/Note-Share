@@ -3,7 +3,14 @@ package com.test.nick.noteshare;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.animation.DynamicAnimation;
+import android.support.animation.FlingAnimation;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +22,17 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemListener{
     private static final String TAG = "MainActivity";
+
+    private static final String FILE_NAME = "notes";
+    private static final String PREFERENCE = "first";
 
     private ArrayList<String> test = new ArrayList<>();
     private NoteAdapter adapter;
@@ -28,6 +42,21 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: starting program");
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (preferences.getBoolean(PREFERENCE, true)){
+            //write data to file
+            try {
+                FileOutputStream outputStream = openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+                String message = "DEFAULT MESSAGE";
+                outputStream.write(message.getBytes());
+                outputStream.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            preferences.edit().putBoolean(PREFERENCE, false).commit();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -87,9 +116,96 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     public void addNote(View view){
         Log.d(TAG, "addNote: Floating action button pressed");
 
-        int insertIndex = 0;
-        test.add(insertIndex, "");
-        adapter.notifyItemInserted(insertIndex);
+        final int insertIndex = 0;
+
+        FloatingActionButton fab = findViewById(R.id.add_button);
+        float x = fab.getX() + 22;
+        float y = fab.getY();
+
+        final ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.main_layout);
+
+        FloatingActionButton addSticky = new FloatingActionButton(this);
+        FloatingActionButton addCheck = new FloatingActionButton(this);
+        FloatingActionButton addEvent = new FloatingActionButton(this);
+
+        layout.addView(addSticky);
+        layout.addView(addCheck);
+        layout.addView(addEvent);
+
+        addSticky.setImageDrawable(getDrawable(R.drawable.temp));
+        addCheck.setImageDrawable(getDrawable(R.drawable.temp));
+        addEvent.setImageDrawable(getDrawable(R.drawable.temp));
+
+        addSticky.setSize(FloatingActionButton.SIZE_MINI);
+        addSticky.setX(x);
+        addSticky.setY(y);
+
+        addCheck.setSize(FloatingActionButton.SIZE_MINI);
+        addCheck.setX(x);
+        addCheck.setY(y);
+
+        addEvent.setSize(FloatingActionButton.SIZE_MINI);
+        addEvent.setX(x);
+        addEvent.setY(y);
+
+        addSticky.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //add stickynote and append to text
+                test.add(insertIndex, "");
+                adapter.notifyItemInserted(insertIndex);
+                writeRead();
+                layout.removeView(v);
+            }
+        });
+
+        FlingAnimation fling = new FlingAnimation(addSticky, DynamicAnimation.Y);
+        fling.setStartVelocity(-500)
+                .setFriction(1f)
+                .start();
+        FlingAnimation fling1 = new FlingAnimation(addCheck, DynamicAnimation.Y);
+        fling1.setStartVelocity(-1000)
+                .setFriction(1f)
+                .start();
+        FlingAnimation fling2 = new FlingAnimation(addEvent, DynamicAnimation.Y);
+        fling2.setStartVelocity(-1500)
+                .setFriction(1f)
+                .start();
+
+        //writeRead();
+    }
+
+    private void writeRead(){
+        //Appending the file
+        try {
+            FileOutputStream outputStream = openFileOutput(FILE_NAME, Context.MODE_APPEND);
+            String message = "NEW APPENDED NOTE";
+            outputStream.write(message.getBytes());
+            outputStream.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        //Reading from the file
+        File file = new File(getFilesDir(), FILE_NAME);
+
+        StringBuilder text = new StringBuilder();
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        ((TextView)findViewById(R.id.title_text)).setText(text.toString());
     }
 
     public void removeNote(int removeIndex){
