@@ -154,25 +154,44 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 //add stickynote and append to text
                 test.add(insertIndex, "");
                 adapter.notifyItemInserted(insertIndex);
-                writeRead();
-                layout.removeView(v);
+                //writeRead();
+                layout.removeViews(layout.indexOfChild(v), 3);
+            }
+        });
+        addCheck.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //add checknote and append to text
+                test.add(insertIndex, "");
+                adapter.notifyItemInserted(insertIndex);
+                //writeRead();
+                layout.removeViews(layout.indexOfChild(v) - 1, 3);
+            }
+        });
+        addEvent.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //add event and append to text
+                test.add(insertIndex, "");
+                adapter.notifyItemInserted(insertIndex);
+                //writeRead();
+                layout.removeViews(layout.indexOfChild(v) - 2, 3);
             }
         });
 
         FlingAnimation fling = new FlingAnimation(addSticky, DynamicAnimation.Y);
         fling.setStartVelocity(-500)
-                .setFriction(1f)
+                .setFriction(.75f)
                 .start();
         FlingAnimation fling1 = new FlingAnimation(addCheck, DynamicAnimation.Y);
         fling1.setStartVelocity(-1000)
-                .setFriction(1f)
+                .setFriction(.75f)
                 .start();
         FlingAnimation fling2 = new FlingAnimation(addEvent, DynamicAnimation.Y);
         fling2.setStartVelocity(-1500)
-                .setFriction(1f)
+                .setFriction(.75f)
                 .start();
 
-        //writeRead();
     }
 
     private void writeRead(){
