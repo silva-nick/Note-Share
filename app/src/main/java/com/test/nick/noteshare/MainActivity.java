@@ -233,7 +233,20 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     }
 
     public void leaveActivity(){
-        Intent intent = new Intent(this, StickyEditActivity.class);
+        Intent intent;
+        Log.d(TAG, "leaveActivity================== " + test.get(focusPosition));
+
+        switch ( test.get(focusPosition) ){
+            case "1" :
+                intent = new Intent(this, StickyEditActivity.class);
+                break;
+            case "3" :
+                intent = new Intent(this, CheckEditActivity.class);
+                break;
+            default:
+                Log.d(TAG, "leaveActivity: fhuare'haer;aihe'ia;evnabue;ijvasdnv;waerutaidsvjalkenoiah;slnvawig");
+                intent = new Intent(this, StickyEditActivity.class);
+        }
 
         ActivityOptionsCompat option = ActivityOptionsCompat
                 .makeScaleUpAnimation(focusView, 0, 0, focusView.getWidth(), focusView.getHeight());
