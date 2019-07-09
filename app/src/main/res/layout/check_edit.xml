@@ -40,23 +40,18 @@
             android:hint="@string/title"
             android:textColorHint="@color/hintText"
             android:background="@color/colorSticky"
-            android:layout_gravity="bottom"/>
-
+            android:layout_gravity="bottom"
+            android:imeOptions=""/>
     </FrameLayout>
 
-    <EditText
-        android:id="@+id/check_body"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="12dp"
-        android:textAlignment="gravity"
-        android:gravity="top"
-        android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
-        android:hint="@string/body"
-        android:textColorHint="@color/hintText"
-        android:background="@color/hintText"
         android:layout_weight="1"
-        android:imeOptions=""/>
+        android:orientation="vertical"
+        android:id="@+id/check_list"
+        android:onClick="addCheck"
+        android:background="@color/hintText"/>
 
     <ImageView
         android:id="@+id/check_bot"
@@ -65,5 +60,4 @@
         android:src="@drawable/sticky_bottom"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>
-
 </LinearLayout>

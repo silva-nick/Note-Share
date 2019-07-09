@@ -234,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
     public void leaveActivity(){
         Intent intent;
-        Log.d(TAG, "leaveActivity================== " + test.get(focusPosition));
 
         switch ( test.get(focusPosition) ){
             case "1" :
@@ -244,7 +243,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 intent = new Intent(this, CheckEditActivity.class);
                 break;
             default:
-                Log.d(TAG, "leaveActivity: fhuare'haer;aihe'ia;evnabue;ijvasdnv;waerutaidsvjalkenoiah;slnvawig");
                 intent = new Intent(this, StickyEditActivity.class);
         }
 
