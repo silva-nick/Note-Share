@@ -7,16 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.animation.DynamicAnimation;
-import android.support.animation.FlingAnimation;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.FlingAnimation;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.test.nick.noteshare.data.AppDatabase;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+
 import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -38,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     private NoteAdapter adapter;
     private int focusPosition;
     private View focusView;
+
+    private AppDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +197,11 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         fling2.setStartVelocity(-1500)
                 .setFriction(.75f)
                 .start();
+
+    }
+
+    private void databaseTest(){
+        database = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "test").build();
 
     }
 
