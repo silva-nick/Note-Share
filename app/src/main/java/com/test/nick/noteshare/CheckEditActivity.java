@@ -26,8 +26,6 @@ public class CheckEditActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     private void leaveActivity() {
