@@ -201,9 +201,10 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     }
 
     private void databaseTest(){
-        database = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "test").build();
-
+        database = AppDatabase.getDatabase(this);
     }
+
+
 
     private void writeRead(){
         //Appending the file
