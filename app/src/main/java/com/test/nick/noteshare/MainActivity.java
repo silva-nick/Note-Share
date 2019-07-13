@@ -12,11 +12,16 @@ import androidx.dynamicanimation.animation.FlingAnimation;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.test.nick.noteshare.data.AppDatabase;
+import com.test.nick.noteshare.data.Note;
+import com.test.nick.noteshare.data.NoteViewModel;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -38,18 +43,18 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     private static final String FILE_NAME = "notes";
     private static final String PREFERENCE = "first";
 
-    private ArrayList<String> test = new ArrayList<>();
+    private ArrayList<Note> test = new ArrayList<>();
     private NoteAdapter adapter;
     private int focusPosition;
     private View focusView;
 
-    private AppDatabase database;
+    private NoteViewModel bigData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate: starting program");
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        /*SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (preferences.getBoolean(PREFERENCE, true)){
             //write data to file
             try {
@@ -61,7 +66,9 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 e.printStackTrace();
             }
             preferences.edit().putBoolean(PREFERENCE, false).commit();
-        }
+        }*/
+
+        databaseTest();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -72,9 +79,9 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
-        for (int i = 0; i < 100; i++) {
+        /*for (int i = 0; i < 100; i++) {
             test.add(String.valueOf(i));
-        }
+        }*/
         adapter = new NoteAdapter(test, this);
         recyclerView.setAdapter(adapter);
         adapter.setListeners(this);
@@ -119,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         super.onResume();
     }
 
-    public void addNote(View view){
+    /*public void addNote(View view){
         Log.d(TAG, "addNote: Floating action button pressed");
 
         final int insertIndex = 0;
@@ -198,13 +205,12 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 .setFriction(.75f)
                 .start();
 
-    }
+    }*/
 
     private void databaseTest(){
-        database = AppDatabase.getDatabase(this);
+        bigData = ViewModelProviders.of(this).get(NoteViewModel.class);
+        test = new ArrayList<Note>(bigData.getAllNotes());
     }
-
-
 
     private void writeRead(){
         //Appending the file
@@ -247,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     public void leaveActivity(){
         Intent intent;
 
-        switch ( test.get(focusPosition) ){
+        switch ( test.get(focusPosition).type ){
             case "1" :
                 intent = new Intent(this, StickyEditActivity.class);
                 break;

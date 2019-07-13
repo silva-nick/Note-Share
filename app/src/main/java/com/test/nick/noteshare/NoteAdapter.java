@@ -12,16 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.test.nick.noteshare.data.Note;
+
 import java.util.ArrayList;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private static final String TAG = "NoteAdapter";
     private Context context;
-    private ArrayList<String> data;
+    private ArrayList<Note> data;
     private GestureDetectorCompat gestureDetector;
     private ItemListener itemListener;
 
-    public NoteAdapter(ArrayList<String> words, Context parentContext){
+    public NoteAdapter(ArrayList<Note> words, Context parentContext){
         super();
         data = words;
         context = parentContext;
@@ -45,7 +47,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int index) {
-        viewHolder.text.setText(data.get(index));
+        viewHolder.text.setText(data.get(index).title);
     }
 
     @Override
