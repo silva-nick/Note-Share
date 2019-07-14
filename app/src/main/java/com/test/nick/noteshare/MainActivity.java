@@ -5,15 +5,12 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.FlingAnimation;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.test.nick.noteshare.data.AppDatabase;
 import com.test.nick.noteshare.data.Note;
 import com.test.nick.noteshare.data.NoteViewModel;
 
@@ -23,11 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import android.util.Log;
 import android.view.View;
@@ -44,10 +39,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemListener{
     private static final String TAG = "MainActivity";
 
-    private static final String FILE_NAME = "notes";
-    private static final String PREFERENCE = "first";
-
-    private ArrayList<Note> test = new ArrayList<>();
+    private ArrayList<Note> noteArrayList = new ArrayList<>();
     private NoteAdapter adapter;
     private int focusPosition;
     private View focusView;
@@ -61,21 +53,14 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
         Log.d(TAG, "onCreate: starting program");
 
-        /*SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (preferences.getBoolean(PREFERENCE, true)){
-            //write data to file
-            try {
-                FileOutputStream outputStream = openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
-                String message = "DEFAULT MESSAGE";
-                outputStream.write(message.getBytes());
-                outputStream.close();
-            } catch (Exception e){
-                e.printStackTrace();
+        bigData = ViewModelProviders.of(this).get(NoteViewModel.class);
+        bigData.getAllNotes().observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(@Nullable final List<Note> notes) {
+                // Update the cached copy of the words in the adapter.
+                noteArrayList.addAll(0, notes);
             }
-            preferences.edit().putBoolean(PREFERENCE, false).commit();
-        }*/
-
-        databaseTest();
+        });
 
         RecyclerView recyclerView = findViewById(R.id.recycle_view);
         recyclerView.setHasFixedSize(true);
@@ -83,15 +68,22 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new NoteAdapter(test, this);
+        adapter = new NoteAdapter(noteArrayList, this);
         recyclerView.setAdapter(adapter);
         adapter.setListeners(this);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         //if the codes match the successcode, then changes have been made and the local data should be updated via data from the intent
         if (resultCode == RESULT_OK){
+            Note note = noteArrayList.get(focusPosition);
+            note.title = data.getStringExtra("new_title");
+            note.body = data.getStringExtra("new_body");
+            bigData.update(note);
+            noteArrayList.remove(focusPosition);
+            noteArrayList.add(focusPosition, note);
             ((TextView)findViewById(R.id.title_text)).setText(data.getStringExtra("new_title"));
         }
     }
@@ -127,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         super.onResume();
     }
 
-    /*public void addNote(View view){
+    public void addNote(View view){
         Log.d(TAG, "addNote: Floating action button pressed");
 
         final int insertIndex = 0;
@@ -162,13 +154,15 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         addEvent.setX(x);
         addEvent.setY(y);
 
+        final Note testNote = new Note(981327402, "23asd", "example", "this is a noteArrayList", "");
+
         addSticky.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 //add stickynote and append to text
-                test.add(insertIndex, "fuck me");
+                noteArrayList.add(insertIndex, testNote);
                 adapter.notifyItemInserted(insertIndex);
-                //writeRead();
+                bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v), 3);
             }
         });
@@ -176,9 +170,9 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             @Override
             public void onClick(View v){
                 //add checknote and append to text
-                test.add(insertIndex, "1");
+                noteArrayList.add(insertIndex, testNote);
                 adapter.notifyItemInserted(insertIndex);
-                //writeRead();
+                bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v) - 1, 3);
             }
         });
@@ -186,9 +180,9 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             @Override
             public void onClick(View v){
                 //add event and append to text
-                test.add(insertIndex, "");
+                noteArrayList.add(insertIndex, testNote);
                 adapter.notifyItemInserted(insertIndex);
-                //writeRead();
+                bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v) - 2, 3);
             }
         });
@@ -206,61 +200,18 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 .setFriction(.75f)
                 .start();
 
-    }*/
-
-    private void databaseTest(){
-        bigData = ViewModelProviders.of(this).get(NoteViewModel.class);
-        bigData.getAllNotes().observe(this, new Observer<List<Note>>() {
-            @Override
-            public void onChanged(@Nullable final List<Note> notes) {
-                // Update the cached copy of the words in the adapter.
-                test.addAll(0, notes);
-            }
-        });
-    }
-
-    private void writeRead(){
-        //Appending the file
-        try {
-            FileOutputStream outputStream = openFileOutput(FILE_NAME, Context.MODE_APPEND);
-            String message = "NEW APPENDED NOTE";
-            outputStream.write(message.getBytes());
-            outputStream.close();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-
-        //Reading from the file
-        File file = new File(getFilesDir(), FILE_NAME);
-
-        StringBuilder text = new StringBuilder();
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
-            }
-            br.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        ((TextView)findViewById(R.id.title_text)).setText(text.toString());
     }
 
     public void removeNote(int removeIndex){
-        test.remove(removeIndex);
+        bigData.delete(noteArrayList.get(removeIndex));
+        noteArrayList.remove(removeIndex);
         adapter.notifyItemRemoved(removeIndex);
     }
 
     public void leaveActivity(){
         Intent intent;
 
-        switch ( test.get(focusPosition).type ){
+        switch ( noteArrayList.get(focusPosition).type ){
             case "1" :
                 intent = new Intent(this, StickyEditActivity.class);
                 break;
