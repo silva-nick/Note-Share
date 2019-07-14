@@ -1,8 +1,10 @@
 package com.test.nick.noteshare.data;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -12,9 +14,9 @@ import java.util.List;
 public interface NoteDao {
 
     @Query("SELECT * FROM notes")
-    List<Note> loadAllNotes();
+    LiveData<List<Note>> loadAllNotes();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertNote(Note note);
 
     @Update

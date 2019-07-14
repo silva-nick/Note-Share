@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.Nullable;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.FlingAnimation;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -20,6 +22,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -36,6 +39,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemListener{
     private static final String TAG = "MainActivity";
@@ -52,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
         Log.d(TAG, "onCreate: starting program");
 
         /*SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -70,18 +77,12 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
         databaseTest();
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         RecyclerView recyclerView = findViewById(R.id.recycle_view);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
-        /*for (int i = 0; i < 100; i++) {
-            test.add(String.valueOf(i));
-        }*/
         adapter = new NoteAdapter(test, this);
         recyclerView.setAdapter(adapter);
         adapter.setListeners(this);
@@ -209,7 +210,13 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
     private void databaseTest(){
         bigData = ViewModelProviders.of(this).get(NoteViewModel.class);
-        test = new ArrayList<Note>(bigData.getAllNotes());
+        bigData.getAllNotes().observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(@Nullable final List<Note> notes) {
+                // Update the cached copy of the words in the adapter.
+                test.addAll(0, notes);
+            }
+        });
     }
 
     private void writeRead(){

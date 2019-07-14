@@ -3,11 +3,13 @@ package com.test.nick.noteshare.data;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
 
 public class NoteRepository {
     private NoteDao dao;
-    private List<Note> allNotes;
+    private LiveData<List<Note>> allNotes;
 
 
     public NoteRepository(Application application){
@@ -16,7 +18,7 @@ public class NoteRepository {
         allNotes = dao.loadAllNotes();
     }
 
-    public List<Note> getAllNotes(){
+    public LiveData<List<Note>> getAllNotes(){
         return allNotes;
     }
 
