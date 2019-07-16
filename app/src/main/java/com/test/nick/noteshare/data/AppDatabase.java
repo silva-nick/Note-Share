@@ -45,7 +45,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
-            Note note = new Note(39813742, "sticky", "Please work", "This wont work", "");
+            Note note = new Note("sticky", "Please work", "This wont work", "");
             //dao.insertNote(note);
             return null;
         }

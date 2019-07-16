@@ -10,12 +10,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.test.nick.noteshare.data.Note;
+
 public class StickyEditActivity extends AppCompatActivity {
+    private Note note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sticky_edit);
+
+        note = getIntent().getParcelableExtra("note");
+        ((EditText)findViewById(R.id.sticky_title)).setText(note.title);
+        ((EditText)findViewById(R.id.sticky_body)).setText(note.body);
 
         Button backButton = findViewById(R.id.sticky_back);
         backButton.setOnClickListener(new View.OnClickListener(){
@@ -27,12 +34,8 @@ public class StickyEditActivity extends AppCompatActivity {
     }
 
     private void leaveActivity() {
-        EditText title = findViewById(R.id.sticky_title);
-        EditText body = findViewById(R.id.sticky_body);
-
         Intent sendData = new Intent();
-        sendData.putExtra("new_title", title.getText().toString());
-        sendData.putExtra("new_body", body.getText().toString());
+        sendData.putExtra("note", note);
 
         setResult(RESULT_OK, sendData);
         finish();

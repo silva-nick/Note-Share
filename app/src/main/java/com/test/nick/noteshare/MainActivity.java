@@ -76,11 +76,9 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        //if the codes match the successcode, then changes have been made and the local data should be updated via data from the intent
+        //if the codes match the successCode, then changes have been made and the local data should be updated via data from the intent
         if (resultCode == RESULT_OK){
-            Note note = noteArrayList.get(focusPosition);
-            note.title = data.getStringExtra("new_title");
-            note.body = data.getStringExtra("new_body");
+            Note note = data.getParcelableExtra("note");
             bigData.update(note);
             noteArrayList.remove(focusPosition);
             adapter.notifyItemRemoved(focusPosition);
@@ -155,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         addEvent.setX(x);
         addEvent.setY(y);
 
-        final Note testNote = new Note(981327402, "23asd", "example", "this is a noteArrayList", "");
+        final Note testNote = new Note("23asd", "example", "this is a noteArrayList", "");
 
         addSticky.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -204,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
     public void leaveActivity(){
         Intent intent;
+        Note focusNote = noteArrayList.get(focusPosition);
 
         switch ( noteArrayList.get(focusPosition).type ){
             case "1" :
@@ -215,6 +214,10 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             default:
                 intent = new Intent(this, StickyEditActivity.class);
         }
+
+        intent.putExtra("title", focusNote.title);
+        intent.putExtra("body", focusNote.body);
+        intent.putExtra("note", focusNote);
 
         ActivityOptionsCompat option = ActivityOptionsCompat
                 .makeScaleUpAnimation(focusView, 0, 0, focusView.getWidth(), focusView.getHeight());
