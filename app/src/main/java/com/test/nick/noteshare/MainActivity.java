@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         addEvent.setX(x);
         addEvent.setY(y);
 
-        final Note testNote = new Note("23asd", "example", "this is a noteArrayList", "");
+        final Note testNote = new Note("2", "example", "this is a noteArrayList", "");
 
         addSticky.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -215,8 +215,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 intent = new Intent(this, StickyEditActivity.class);
         }
 
-        intent.putExtra("title", focusNote.title);
-        intent.putExtra("body", focusNote.body);
         intent.putExtra("note", focusNote);
 
         ActivityOptionsCompat option = ActivityOptionsCompat
