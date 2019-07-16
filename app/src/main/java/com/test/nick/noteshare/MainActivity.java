@@ -83,10 +83,9 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             note.body = data.getStringExtra("new_body");
             bigData.update(note);
             noteArrayList.remove(focusPosition);
-            noteArrayList.add(focusPosition, note);
-            Log.d(TAG, "onActivityResult: "+noteArrayList);
+            adapter.notifyItemRemoved(focusPosition);
+            Log.d(TAG, "onActivityResult ================================ " + noteArrayList.size());
             adapter.notifyDataSetChanged();
-            ((TextView)findViewById(R.id.title_text)).setText(data.getStringExtra("new_title"));
         }
     }
 
@@ -162,8 +161,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             @Override
             public void onClick(View v){
                 //add stickynote and append to text
-                noteArrayList.add(insertIndex, testNote);
-                adapter.notifyItemInserted(insertIndex);
                 bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v), 3);
             }
@@ -172,8 +169,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             @Override
             public void onClick(View v){
                 //add checknote and append to text
-                noteArrayList.add(insertIndex, testNote);
-                adapter.notifyItemInserted(insertIndex);
                 bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v) - 1, 3);
             }
@@ -182,8 +177,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             @Override
             public void onClick(View v){
                 //add event and append to text
-                noteArrayList.add(insertIndex, testNote);
-                adapter.notifyItemInserted(insertIndex);
                 bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v) - 2, 3);
             }
