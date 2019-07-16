@@ -52,7 +52,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return data.get(position).equals("1") ? 0 : 1;
+        return data.get(position).type.equals("1") ? 0 : 1;
     }
 
     @Override

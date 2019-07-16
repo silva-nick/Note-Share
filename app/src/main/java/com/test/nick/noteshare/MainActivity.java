@@ -53,15 +53,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
 
         Log.d(TAG, "onCreate: starting program");
 
-        bigData = ViewModelProviders.of(this).get(NoteViewModel.class);
-        bigData.getAllNotes().observe(this, new Observer<List<Note>>() {
-            @Override
-            public void onChanged(@Nullable final List<Note> notes) {
-                // Update the cached copy of the words in the adapter.
-                noteArrayList.addAll(0, notes);
-            }
-        });
-
         RecyclerView recyclerView = findViewById(R.id.recycle_view);
         recyclerView.setHasFixedSize(true);
 
@@ -71,7 +62,16 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         adapter = new NoteAdapter(noteArrayList, this);
         recyclerView.setAdapter(adapter);
         adapter.setListeners(this);
-        adapter.notifyDataSetChanged();
+
+        bigData = ViewModelProviders.of(this).get(NoteViewModel.class);
+        bigData.getAllNotes().observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(@Nullable final List<Note> notes) {
+                // Update the cached copy of the words in the adapter.
+                noteArrayList.addAll(0, notes);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             bigData.update(note);
             noteArrayList.remove(focusPosition);
             noteArrayList.add(focusPosition, note);
+            Log.d(TAG, "onActivityResult: "+noteArrayList);
+            adapter.notifyDataSetChanged();
             ((TextView)findViewById(R.id.title_text)).setText(data.getStringExtra("new_title"));
         }
     }
@@ -199,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         fling2.setStartVelocity(-1500)
                 .setFriction(.75f)
                 .start();
-
     }
 
     public void removeNote(int removeIndex){
