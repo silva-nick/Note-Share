@@ -34,7 +34,12 @@ public class StickyEditActivity extends AppCompatActivity {
     }
 
     private void leaveActivity() {
+        EditText title = findViewById(R.id.sticky_title);
+        EditText body = findViewById(R.id.sticky_body);
         Intent sendData = new Intent();
+        note.title = title.getText().toString();
+        note.body = body.getText().toString();
+
         sendData.putExtra("note", note);
 
         setResult(RESULT_OK, sendData);

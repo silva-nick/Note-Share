@@ -68,22 +68,18 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             @Override
             public void onChanged(@Nullable final List<Note> notes) {
                 // Update the cached copy of the words in the adapter.
+                noteArrayList.clear(); //This is bad programming
                 noteArrayList.addAll(0, notes);
                 adapter.notifyDataSetChanged();
             }
         });
     }
 
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         //if the codes match the successCode, then changes have been made and the local data should be updated via data from the intent
         if (resultCode == RESULT_OK){
             Note note = data.getParcelableExtra("note");
             bigData.update(note);
-            noteArrayList.remove(focusPosition);
-            adapter.notifyItemRemoved(focusPosition);
-            Log.d(TAG, "onActivityResult ================================ " + noteArrayList.size());
-            adapter.notifyDataSetChanged();
         }
     }
 
@@ -153,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         addEvent.setX(x);
         addEvent.setY(y);
 
-        final Note testNote = new Note("2", "example", "this is a noteArrayList", "");
+        final Note testNote = new Note("21231", "example", "this is a noteArrayList", "");
 
         addSticky.setOnClickListener(new View.OnClickListener(){
             @Override
