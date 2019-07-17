@@ -28,7 +28,7 @@
             android:src="@drawable/sticky_top"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            android:layout_gravity="top"/>
+            android:layout_gravity="start|top"/>
 
         <EditText
             android:id="@+id/check_title"
@@ -40,8 +40,7 @@
             android:hint="@string/title"
             android:textColorHint="@color/hintText"
             android:background="@color/colorSticky"
-            android:layout_gravity="bottom"
-            android:imeOptions=""/>
+            android:layout_gravity="end|bottom" />
     </FrameLayout>
 
     <LinearLayout

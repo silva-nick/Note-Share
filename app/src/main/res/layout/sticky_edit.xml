@@ -28,19 +28,19 @@
             android:src="@drawable/sticky_top"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            android:layout_gravity="top"/>
+            android:layout_gravity="top|start"/>
 
         <EditText
             android:id="@+id/sticky_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
             android:textSize="32sp"
+            android:layout_marginLeft="125dp"
             android:inputType="textCapSentences"
             android:hint="@string/title"
             android:textColorHint="@color/hintText"
             android:background="@color/colorSticky"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="center_vertical|end"/>
 
     </FrameLayout>
 

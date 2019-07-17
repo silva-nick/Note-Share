@@ -16,6 +16,9 @@ import com.test.nick.noteshare.data.NoteViewModel;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 
 import androidx.lifecycle.Observer;
@@ -23,6 +26,7 @@ import androidx.lifecycle.ViewModelProviders;;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -211,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 .makeScaleUpAnimation(focusView, 0, 0, focusView.getWidth(), focusView.getHeight());
         ActivityCompat.startActivityForResult( this, intent, 69, option.toBundle());
     }
-
 
     @Override
     public void onItemTap() {
