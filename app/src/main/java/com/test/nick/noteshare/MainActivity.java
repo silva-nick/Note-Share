@@ -65,8 +65,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         bigData.getAllNotes().observe(this, new Observer<List<Note>>() {
             @Override
             public void onChanged(@Nullable final List<Note> notes) {
-                // Update the cached copy of the words in the adapter.
-                noteArrayList.clear(); //This is bad programming
+                noteArrayList.clear(); //This is bad programming :)
                 noteArrayList.addAll(0, notes);
                 adapter.notifyDataSetChanged();
             }
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         addEvent.setX(x);
         addEvent.setY(y);
 
-        final Note testNote = new Note("21231", "example", "this is a noteArrayList", "");
+        final Note testNote = new Note(1, "example", "this is a noteArrayList", "");
 
         addSticky.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -199,10 +198,10 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         Note focusNote = noteArrayList.get(focusPosition);
 
         switch ( noteArrayList.get(focusPosition).type ){
-            case "1" :
+            case 0 :
                 intent = new Intent(this, StickyEditActivity.class);
                 break;
-            case "3" :
+            case 1 :
                 intent = new Intent(this, CheckEditActivity.class);
                 break;
             default:

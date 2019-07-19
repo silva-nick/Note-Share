@@ -13,7 +13,7 @@ public class Note implements Parcelable {
     public int nid;
 
     @ColumnInfo(name = "type")
-    public String type;
+    public int type;
 
     @ColumnInfo(name = "title")
     public String title;
@@ -24,7 +24,7 @@ public class Note implements Parcelable {
     @ColumnInfo(name = "extra")
     public String extra;
 
-    public Note(String type, String title, String body, String extra){
+    public Note(int type, String title, String body, String extra){
         this.type = type;
         this.title = title;
         this.body = body;
@@ -33,7 +33,7 @@ public class Note implements Parcelable {
 
     protected Note(Parcel in) {
         nid = in.readInt();
-        type = in.readString();
+        type = in.readInt();
         title = in.readString();
         body = in.readString();
         extra = in.readString();
@@ -42,7 +42,7 @@ public class Note implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(nid);
-        dest.writeString(type);
+        dest.writeInt(type);
         dest.writeString(title);
         dest.writeString(body);
         dest.writeString(extra);
@@ -64,5 +64,10 @@ public class Note implements Parcelable {
             return new Note[size];
         }
     };
+
+    @Override
+    public String toString(){
+        return "id: " + nid + " type: "+ type + " title: " + title;
+    }
 }
 

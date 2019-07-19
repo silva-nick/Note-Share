@@ -35,10 +35,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         switch (type){
             case 0:
                 return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.check_note, viewGroup, false));
+                        .inflate(R.layout.sticky_note, viewGroup, false));
             case 1:
                 return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.sticky_note, viewGroup, false));
+                        .inflate(R.layout.check_note, viewGroup, false));
             default:
                 return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.sticky_note, viewGroup, false));
@@ -52,7 +52,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return data.get(position).type.equals("1") ? 0 : 1;
+        Log.d(TAG, "getItemViewType: " + data.get(position).toString());
+        return data.get(position).type;
     }
 
     @Override
