@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     private NoteAdapter adapter;
     private int focusPosition;
     private View focusView;
-
     private NoteViewModel bigData;
 
     @Override
@@ -146,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         addEvent.setX(x);
         addEvent.setY(y);
 
-        final Note testNote = new Note(1, "example", "this is a noteArrayList", "");
+        final Note testNote = new Note(0, "example", "Filler text used to test if this works", "");
 
         addSticky.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -160,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             @Override
             public void onClick(View v){
                 //add checknote and append to text
+                testNote.type = 1;
                 bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v) - 1, 3);
             }
@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             @Override
             public void onClick(View v){
                 //add event and append to text
+                testNote.type = 2;
                 bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v) - 2, 3);
             }

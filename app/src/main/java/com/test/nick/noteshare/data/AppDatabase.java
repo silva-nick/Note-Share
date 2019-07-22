@@ -20,34 +20,10 @@ public abstract class AppDatabase extends RoomDatabase {
             synchronized (AppDatabase.class){
                 if (INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(c.getApplicationContext(),
-                            AppDatabase.class, "test").addCallback(sRoomDatabaseCallback).build();
+                            AppDatabase.class, "test").build();
                 }
             }
         }
         return INSTANCE;
-    }
-
-    private static RoomDatabase.Callback sRoomDatabaseCallback =
-        new RoomDatabase.Callback(){
-            @Override
-            public void onOpen (@NonNull SupportSQLiteDatabase db) {
-                super.onOpen(db); new PopulateDbAsync(INSTANCE).execute();
-            }
-    };
-
-    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-
-        private final NoteDao dao;
-
-        PopulateDbAsync(AppDatabase db) {
-            dao = db.noteDao();
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            Note note = new Note(0, "Title", "Body", "");
-            dao.insertNote(note);
-            return null;
-        }
     }
 }

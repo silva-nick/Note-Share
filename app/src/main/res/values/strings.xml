@@ -4,4 +4,6 @@
     <string name="title_activity_sticky_edit">StickyEditActivity</string>
     <string name="body">Body</string>
     <string name="back_button"><![CDATA[<-]]></string>
+    <string name="check_hint">New item</string>
+    <string name="check_plus_hint">Add an item</string>
 </resources>
