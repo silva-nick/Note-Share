@@ -49,9 +49,7 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         android:onClick="addCheck"
-        android:background="@color/hintText">
-        <include layout="@layout/check_plus"/>
-    </androidx.recyclerview.widget.RecyclerView>
+        android:background="@color/hintText" />
 
     <ImageView
         android:id="@+id/check_bot"

@@ -9,9 +9,11 @@
         android:layout_width="wrap_content"
         android:id="@+id/check"
         android:button="@drawable/temp"/>
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/check_text"
-        android:hint="@string/check_hint"/>
+        android:hint="@string/check_hint"
+        android:layout_weight="1"/>
 </LinearLayout>

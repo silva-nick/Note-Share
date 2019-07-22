@@ -36,6 +36,7 @@ public class CheckEditActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        checkList.add("-100");
         adapter = new CheckAdapter(checkList);
         recyclerView.setAdapter(adapter);
 

@@ -1,8 +1,6 @@
 package com.test.nick.noteshare;
 
-import android.content.Context;
 import androidx.annotation.NonNull;
-import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,18 +22,27 @@ public class CheckAdapter extends RecyclerView.Adapter<CheckAdapter.ViewHolder> 
     public CheckAdapter(ArrayList<String> words){
         super();
         data = words;
-
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int index) {
-        ViewHolder v =new ViewHolder((LinearLayout) LayoutInflater.from(viewGroup.getContext())
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
+        if (type == 1){
+            return new ViewHolder((LinearLayout) LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.check_plus, viewGroup, false));
+        }
+
+        ViewHolder v = new ViewHolder((LinearLayout) LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.check, viewGroup, false));
         v.text.setFocusedByDefault(true);
         return v;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (data.get(position).equals("-100")){return 1;}
+        return 0;
+    }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int index) {
