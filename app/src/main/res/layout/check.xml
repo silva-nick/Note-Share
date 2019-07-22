@@ -11,6 +11,15 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:id="@+id/check_text"
-        android:hint="@string/check_hint"/>
+        android:hint="@string/check_hint"
+        android:inputType="textCapSentences" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="del"
+        android:visibility="invisible"
+        android:id="@+id/check_delete"/>
+
 </LinearLayout>

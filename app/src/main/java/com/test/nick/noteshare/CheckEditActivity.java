@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.test.nick.noteshare.data.Note;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CheckEditActivity extends AppCompatActivity {
     private static final String TAG = "CheckEditActivity";
@@ -36,21 +37,15 @@ public class CheckEditActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        checkList.add("-100");
-        adapter = new CheckAdapter(checkList);
-        recyclerView.setAdapter(adapter);
-
-        recyclerView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                addCheck(v);
-            }
-        });
 
         note = getIntent().getParcelableExtra("note");
         EditText title = findViewById(R.id.check_title);
         title.setText(note.title);
-        //instantiate the checklist
+
+        checkList = new ArrayList<String>(Arrays.asList(note.body.split("x92n")));
+        if (!checkList.get(checkList.size() - 1).equals("-100")){checkList.add(checkList.size(), "-100");}
+        adapter = new CheckAdapter(checkList);
+        recyclerView.setAdapter(adapter);
 
         Button backButton = findViewById(R.id.check_back);
         backButton.setOnClickListener(new View.OnClickListener(){
@@ -63,9 +58,8 @@ public class CheckEditActivity extends AppCompatActivity {
         title.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                checkList.add("");
+                checkList.add(checkList.size() - 1, "");
                 adapter.notifyDataSetChanged();
-
                 return false;
             }
         });
@@ -76,7 +70,11 @@ public class CheckEditActivity extends AppCompatActivity {
 
         Intent sendData = new Intent();
         note.title = title.getText().toString();
-        //update note body with checklist edits
+        String bodyOutput = "";
+        for(String x : checkList){
+            bodyOutput += x + "x92n";
+        }
+        note.body = bodyOutput;
         sendData.putExtra("note", note);
 
         setResult(RESULT_OK, sendData);
@@ -85,11 +83,7 @@ public class CheckEditActivity extends AppCompatActivity {
 
     public void addCheck(View v){
         Log.d(TAG, "addCheck: ");
-        //LinearLayout list = findViewById(R.id.check_list);
-        CheckBox box = new CheckBox(this);
-        box.setButtonDrawable(R.drawable.temp);
-        //list.addView(box);
-        checkList.add("test");
+        checkList.add(checkList.size() - 1, "");
         adapter.notifyDataSetChanged();
     }
 }
