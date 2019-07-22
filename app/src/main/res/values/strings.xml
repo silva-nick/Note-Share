@@ -6,4 +6,8 @@
     <string name="back_button"><![CDATA[<-]]></string>
     <string name="check_hint">New item</string>
     <string name="check_plus_hint">Add an item</string>
+    <string name="event_title_hint">Event Name:</string>
+    <string name="event_start">Event Start: (mm/dd/yyyy hr:min)</string>
+    <string name="event_location">Location:</string>
+    <string name="event_description">Describe the event here..</string>
 </resources>

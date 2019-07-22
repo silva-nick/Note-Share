@@ -39,6 +39,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             case 1:
                 return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.check_note, viewGroup, false));
+            case 2:
+                return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.event_note, viewGroup, false));
             default:
                 return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.sticky_note, viewGroup, false));
@@ -69,7 +72,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             super(view);
             Log.d(TAG, "ViewHolder: " + view.toString());
             cardView = view;
-            text = cardView.findViewById(R.id.sticky_text);
+            text = cardView.findViewById(R.id.note_text);
             gestureDetector = new GestureDetectorCompat(context, new GestureListener());
             view.setOnTouchListener(this);
         }

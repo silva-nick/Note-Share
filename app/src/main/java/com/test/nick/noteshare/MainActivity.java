@@ -124,14 +124,17 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         FloatingActionButton addSticky = new FloatingActionButton(this);
         FloatingActionButton addCheck = new FloatingActionButton(this);
         FloatingActionButton addEvent = new FloatingActionButton(this);
+        FloatingActionButton addGoal = new FloatingActionButton(this);
 
         layout.addView(addSticky);
         layout.addView(addCheck);
         layout.addView(addEvent);
+        layout.addView(addGoal);
 
         addSticky.setImageDrawable(getDrawable(R.drawable.temp));
         addCheck.setImageDrawable(getDrawable(R.drawable.temp));
         addEvent.setImageDrawable(getDrawable(R.drawable.temp));
+        addGoal.setImageDrawable(getDrawable(R.drawable.temp));
 
         addSticky.setSize(FloatingActionButton.SIZE_MINI);
         addSticky.setX(x);
@@ -145,6 +148,10 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         addEvent.setX(x);
         addEvent.setY(y);
 
+        addGoal.setSize(FloatingActionButton.SIZE_MINI);
+        addGoal.setX(x);
+        addGoal.setY(y);
+
         final Note testNote = new Note(0, "example", "Filler text used to test if this works", "");
 
         addSticky.setOnClickListener(new View.OnClickListener(){
@@ -152,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             public void onClick(View v){
                 //add stickynote and append to text
                 bigData.insert(testNote);
-                layout.removeViews(layout.indexOfChild(v), 3);
+                layout.removeViews(layout.indexOfChild(v), 4);
             }
         });
         addCheck.setOnClickListener(new View.OnClickListener(){
@@ -161,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 //add checknote and append to text
                 testNote.type = 1;
                 bigData.insert(testNote);
-                layout.removeViews(layout.indexOfChild(v) - 1, 3);
+                layout.removeViews(layout.indexOfChild(v) - 1, 4);
             }
         });
         addEvent.setOnClickListener(new View.OnClickListener(){
@@ -170,7 +177,16 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 //add event and append to text
                 testNote.type = 2;
                 bigData.insert(testNote);
-                layout.removeViews(layout.indexOfChild(v) - 2, 3);
+                layout.removeViews(layout.indexOfChild(v) - 2, 4);
+            }
+        });
+        addGoal.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //add event and append to text
+                testNote.type = 3;
+                bigData.insert(testNote);
+                layout.removeViews(layout.indexOfChild(v) - 3, 4);
             }
         });
 
@@ -178,12 +194,16 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         fling.setStartVelocity(-500)
                 .setFriction(.75f)
                 .start();
-        FlingAnimation fling1 = new FlingAnimation(addCheck, DynamicAnimation.Y);
-        fling1.setStartVelocity(-1000)
+        fling = new FlingAnimation(addCheck, DynamicAnimation.Y);
+        fling.setStartVelocity(-1000)
                 .setFriction(.75f)
                 .start();
-        FlingAnimation fling2 = new FlingAnimation(addEvent, DynamicAnimation.Y);
-        fling2.setStartVelocity(-1500)
+        fling = new FlingAnimation(addEvent, DynamicAnimation.Y);
+        fling.setStartVelocity(-1500)
+                .setFriction(.75f)
+                .start();
+        fling = new FlingAnimation(addGoal, DynamicAnimation.Y);
+        fling.setStartVelocity(-2000)
                 .setFriction(.75f)
                 .start();
     }
@@ -204,6 +224,9 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 break;
             case 1 :
                 intent = new Intent(this, CheckEditActivity.class);
+                break;
+            case 2 :
+                intent = new Intent(this, EventEditActivity.class);
                 break;
             default:
                 intent = new Intent(this, StickyEditActivity.class);
