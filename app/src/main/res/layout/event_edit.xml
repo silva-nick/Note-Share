@@ -41,34 +41,71 @@
             android:textSize="32sp"
             android:layout_marginLeft="125dp"
             android:inputType="textCapSentences"
-            android:hint="@string/title"
+            android:hint="@string/event_title_hint"
             android:textColorHint="@color/hintText"
             android:background="@color/colorSticky"
             android:layout_gravity="center_vertical|end"/>
 
     </FrameLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/fuckidk"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/event_frame">
+        app:layout_constraintTop_toBottomOf="@id/event_frame"
+        android:id="@+id/event_start_layout">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="hint" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:text="@string/event_start"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/event_start1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".4">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/event_date" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/event_start2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".6">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/event_time" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        app:layout_constraintTop_toBottomOf="@+id/fuckidk"
+        android:id="@+id/event_location"
+        app:layout_constraintTop_toBottomOf="@+id/event_start_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="hint" />
+            android:hint="@string/event_location" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/event_description"
+        app:layout_constraintTop_toBottomOf="@+id/event_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/event_description" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
