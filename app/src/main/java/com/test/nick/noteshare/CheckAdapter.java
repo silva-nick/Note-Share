@@ -86,6 +86,7 @@ public class CheckAdapter extends RecyclerView.Adapter {
                     return false;
                 }
             });
+            text.setFocusedByDefault(true);
             layout = view;
 
             view.findViewById(R.id.check_delete).setOnClickListener(new View.OnClickListener(){

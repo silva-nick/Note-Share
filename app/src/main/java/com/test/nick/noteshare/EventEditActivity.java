@@ -26,15 +26,24 @@ import java.util.Locale;
 
 public class EventEditActivity extends AppCompatActivity {
     private Note note;
-    private int mYear,mMonth,mDay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_edit);
-
         note = getIntent().getParcelableExtra("note");
-        ((EditText)findViewById(R.id.event_title)).setText(note.title);
-        //((TextInputLayout)findViewById(R.id.fuckidk)).setText(note.body);
+
+        if(note.extra.equals("true")) {
+            ((EditText) findViewById(R.id.event_title)).setText(note.title);
+
+            String[] bodyArray = note.body.split(MainActivity.breakCode);
+
+            ((Button)findViewById(R.id.event_start1)).setText(bodyArray[0]);
+            ((Button)findViewById(R.id.event_start2)).setText(bodyArray[1]);
+            ((TextInputEditText)findViewById(R.id.event_location_text)).setText(bodyArray[2]);
+            ((TextInputEditText)findViewById(R.id.event_description_text)).setText(bodyArray[3]);
+            ((Button)findViewById(R.id.event_create)).setText("Edit Event");
+        }
 
         Button backButton = findViewById(R.id.event_back);
         backButton.setOnClickListener(new View.OnClickListener(){
@@ -77,7 +86,7 @@ public class EventEditActivity extends AppCompatActivity {
                 timePicker = new TimePickerDialog(EventEditActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        timeButton.setText( selectedHour + ":" + String.format("%2d", (double)selectedMinute));
+                        timeButton.setText( selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, true);
                 timePicker.setTitle("Select Time");
@@ -86,17 +95,37 @@ public class EventEditActivity extends AppCompatActivity {
         });
     }
 
-    private void leaveActivity() {
+    //called by create event button
+    public void createEvent(View v){
         EditText text = findViewById(R.id.event_title);
         note.title = text.getText().toString();
-        //text = findViewById(R.id.event_start2);
+        note.body = formatBody();
+        note.extra = "true";
+
         Intent sendData = new Intent();
-
-        //note.body = body.getText().toString();
-
         sendData.putExtra("note", note);
-
         setResult(RESULT_OK, sendData);
         finish();
+    }
+
+    private void leaveActivity() {
+        if(note.extra.equals("true")){
+            EditText text = findViewById(R.id.event_title);
+            note.title = text.getText().toString();
+            note.body = formatBody();
+
+            Intent sendData = new Intent();
+            sendData.putExtra("note", note);
+            setResult(RESULT_OK, sendData);
+        }
+        finish();
+    }
+
+    private String formatBody(){
+        String output = ((Button)findViewById(R.id.event_start1)).getText() + MainActivity.breakCode;
+        output += ((Button)findViewById(R.id.event_start2)).getText() + MainActivity.breakCode;
+        output += ((TextInputEditText)findViewById(R.id.event_location_text)).getText() + MainActivity.breakCode;
+        output += ((TextInputEditText)findViewById(R.id.event_description_text)).getText();
+        return output;
     }
 }

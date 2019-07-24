@@ -42,7 +42,7 @@ public class CheckEditActivity extends AppCompatActivity {
         EditText title = findViewById(R.id.check_title);
         title.setText(note.title);
 
-        checkList = new ArrayList<String>(Arrays.asList(note.body.split("x92n")));
+        checkList = new ArrayList<String>(Arrays.asList(note.body.split(MainActivity.breakCode)));
         if (!checkList.get(checkList.size() - 1).equals("-100")){checkList.add(checkList.size(), "-100");}
         adapter = new CheckAdapter(checkList);
         recyclerView.setAdapter(adapter);
@@ -72,7 +72,7 @@ public class CheckEditActivity extends AppCompatActivity {
         note.title = title.getText().toString();
         String bodyOutput = "";
         for(String x : checkList){
-            bodyOutput += x + "x92n";
+            bodyOutput += x + MainActivity.breakCode;
         }
         note.body = bodyOutput;
         sendData.putExtra("note", note);

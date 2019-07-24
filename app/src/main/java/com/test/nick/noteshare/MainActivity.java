@@ -36,6 +36,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemListener{
     private static final String TAG = "MainActivity";
+    public static final String breakCode = "x92n";
 
     private ArrayList<Note> noteArrayList = new ArrayList<>();
     private NoteAdapter adapter;

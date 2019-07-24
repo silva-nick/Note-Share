@@ -12,4 +12,5 @@
     <string name="event_time">(hr:min)</string>
     <string name="event_location">Location:</string>
     <string name="event_description">Describe the event here..</string>
+    <string name="event_create">Create Event</string>
 </resources>
