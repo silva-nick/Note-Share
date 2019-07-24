@@ -3,10 +3,12 @@ package com.test.nick.noteshare;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Notification;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.EventLog;
 import android.view.View;
@@ -102,6 +104,8 @@ public class EventEditActivity extends AppCompatActivity {
         note.body = formatBody();
         note.extra = "true";
 
+        createNotification();
+
         Intent sendData = new Intent();
         sendData.putExtra("note", note);
         setResult(RESULT_OK, sendData);
@@ -127,5 +131,8 @@ public class EventEditActivity extends AppCompatActivity {
         output += ((TextInputEditText)findViewById(R.id.event_location_text)).getText() + MainActivity.breakCode;
         output += ((TextInputEditText)findViewById(R.id.event_description_text)).getText();
         return output;
+    }
+
+    private void createNotification(){
     }
 }
