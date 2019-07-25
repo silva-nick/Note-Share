@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
@@ -11,6 +12,7 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.EventLog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -22,11 +24,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.test.nick.noteshare.data.Note;
 
-import org.w3c.dom.Text;
-
-import java.util.Locale;
+import java.time.LocalDateTime;
 
 public class EventEditActivity extends AppCompatActivity {
+    public static final String TAG = "EventEditActivity";
+
     private Note note;
 
     @Override
@@ -104,7 +106,15 @@ public class EventEditActivity extends AppCompatActivity {
         note.body = formatBody();
         note.extra = "true";
 
-        createNotification();
+        String [] info = note.body.split(MainActivity.breakCode);
+        String [] date = info[0].split("/");
+        String [] time = info[1].split(":");
+        LocalDateTime cal = LocalDateTime.of(2019,7,25, 12,39);
+        //cal.set(Integer.parseInt(date[2]) + 1900, Integer.parseInt(date[1]), Integer.parseInt(date[0]), Integer.parseInt(time[0]), Integer.parseInt(time[1]), 0);
+        Log.d(TAG, "createEvent: " + date[2]+ date[1]+ date[0]);
+
+        NotificationCreator c = new NotificationCreator(this, note, NotificationCreator.NoteFrequency.MEDIUM);
+        c.createNotification(cal.getNano());
 
         Intent sendData = new Intent();
         sendData.putExtra("note", note);
@@ -131,8 +141,5 @@ public class EventEditActivity extends AppCompatActivity {
         output += ((TextInputEditText)findViewById(R.id.event_location_text)).getText() + MainActivity.breakCode;
         output += ((TextInputEditText)findViewById(R.id.event_description_text)).getText();
         return output;
-    }
-
-    private void createNotification(){
     }
 }

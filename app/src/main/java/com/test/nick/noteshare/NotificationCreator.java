@@ -1,5 +1,6 @@
 package com.test.nick.noteshare;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,27 +8,29 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.SystemClock;
+import android.util.Log;
 
 import androidx.core.app.NotificationManagerCompat;
 
 import com.test.nick.noteshare.data.Note;
 
 public class NotificationCreator {
+    public static final String TAG = "NotificationCreator";
+
     private static final String CHANNEL_ID = "disney_channel";
 
     private Context context;
     private Note note;
-    private String time;
     private NoteFrequency frequency;
 
-    public NotificationCreator(Context c, Note note, String time, NotificationCreator.NoteFrequency frequency){
+    public NotificationCreator(Context c, Note note, NotificationCreator.NoteFrequency frequency){
         this.context = c;
         this.note = note;
-        this.time = time;
         this.frequency = frequency;
     }
 
-    public void createNotification(){
+    public void createNotification(int time){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             CharSequence name = "thicc notification";
@@ -43,6 +46,9 @@ public class NotificationCreator {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, intent, 0);
 
+        //intent = new Intent(this.context, MainActivity.class);
+        //intent.setAction(ACTION_SNOOZE);
+
         Notification.Builder builder = new Notification.Builder(this.context, CHANNEL_ID)
             .setSmallIcon(R.drawable.temp)
             .setContentTitle(note.title)
@@ -50,10 +56,15 @@ public class NotificationCreator {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.context);
+        Intent notificationIntent = new Intent(this.context, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, builder.build());
+        PendingIntent broadcastIntent = PendingIntent.getBroadcast(this.context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-// notificationId is a unique int for each notification that you must define
-        notificationManager.notify(123, builder.build());
+        long futureInMillis = SystemClock.elapsedRealtime() + 10000;
+        Log.d(TAG, "createNotification: ==========" + System.currentTimeMillis() + "========= "+time);
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, time, broadcastIntent);
     }
 
     public enum NoteFrequency{
