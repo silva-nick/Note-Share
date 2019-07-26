@@ -14,9 +14,11 @@ import android.os.Bundle;
 import android.util.EventLog;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -40,6 +42,11 @@ public class EventEditActivity extends AppCompatActivity {
         setContentView(R.layout.event_edit);
         note = getIntent().getParcelableExtra("note");
 
+        Spinner spin = findViewById(R.id.event_spinner);
+        String [] options = new String[]{"Low", "Medium", "High"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, options);
+        spin.setAdapter(adapter);
+
         if(note.extra.equals("true")) {
             ((EditText) findViewById(R.id.event_title)).setText(note.title);
 
@@ -50,6 +57,7 @@ public class EventEditActivity extends AppCompatActivity {
             ((TextInputEditText)findViewById(R.id.event_location_text)).setText(bodyArray[2]);
             ((TextInputEditText)findViewById(R.id.event_description_text)).setText(bodyArray[3]);
             ((Button)findViewById(R.id.event_create)).setText("Edit Event");
+            ((Spinner)findViewById(R.id.event_spinner)).setSelection(adapter.getPosition(bodyArray[4]));
         }
 
         Button backButton = findViewById(R.id.event_back);
@@ -117,7 +125,7 @@ public class EventEditActivity extends AppCompatActivity {
         Log.d(TAG, "createEvent: " + date[2]+ date[1]+ date[0]);
         ZonedDateTime zdt = test.atZone(ZoneId.of("America/Chicago"));
 
-        NotificationCreator c = new NotificationCreator(this, note, NotificationCreator.NoteFrequency.MEDIUM);
+        NotificationCreator c = new NotificationCreator(this, note, getSpinner());
         c.createNotification(zdt.toInstant().toEpochMilli());
 
         Intent sendData = new Intent();
@@ -143,7 +151,21 @@ public class EventEditActivity extends AppCompatActivity {
         String output = ((Button)findViewById(R.id.event_start1)).getText() + MainActivity.breakCode;
         output += ((Button)findViewById(R.id.event_start2)).getText() + MainActivity.breakCode;
         output += ((TextInputEditText)findViewById(R.id.event_location_text)).getText() + MainActivity.breakCode;
-        output += ((TextInputEditText)findViewById(R.id.event_description_text)).getText();
+        output += ((TextInputEditText)findViewById(R.id.event_description_text)).getText() + MainActivity.breakCode;
+        output += ((Spinner)findViewById(R.id.event_spinner)).getSelectedItem().toString();
         return output;
+    }
+
+    private NotificationCreator.NoteFrequency getSpinner(){
+        String value = ((Spinner)findViewById(R.id.event_spinner)).getSelectedItem().toString();
+        switch (value){
+            case "Low":
+                return NotificationCreator.NoteFrequency.LOW;
+            case "Medium":
+                return NotificationCreator.NoteFrequency.MEDIUM;
+            case "High":
+                return NotificationCreator.NoteFrequency.HIGH;
+        }
+        return NotificationCreator.NoteFrequency.MEDIUM;
     }
 }
