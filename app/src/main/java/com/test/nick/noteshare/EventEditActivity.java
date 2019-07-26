@@ -25,6 +25,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.test.nick.noteshare.data.Note;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 public class EventEditActivity extends AppCompatActivity {
     public static final String TAG = "EventEditActivity";
@@ -109,12 +112,13 @@ public class EventEditActivity extends AppCompatActivity {
         String [] info = note.body.split(MainActivity.breakCode);
         String [] date = info[0].split("/");
         String [] time = info[1].split(":");
-        LocalDateTime cal = LocalDateTime.of(2019,7,25, 12,39);
-        //cal.set(Integer.parseInt(date[2]) + 1900, Integer.parseInt(date[1]), Integer.parseInt(date[0]), Integer.parseInt(time[0]), Integer.parseInt(time[1]), 0);
+        LocalDateTime cal = LocalDateTime.of(2019,7,25, 18,2, 20);
+        LocalDateTime test = LocalDateTime.of(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]), Integer.parseInt(time[0]), Integer.parseInt(time[1]), 0);
         Log.d(TAG, "createEvent: " + date[2]+ date[1]+ date[0]);
+        ZonedDateTime zdt = test.atZone(ZoneId.of("America/Chicago"));
 
         NotificationCreator c = new NotificationCreator(this, note, NotificationCreator.NoteFrequency.MEDIUM);
-        c.createNotification(cal.getNano());
+        c.createNotification(zdt.toInstant().toEpochMilli());
 
         Intent sendData = new Intent();
         sendData.putExtra("note", note);

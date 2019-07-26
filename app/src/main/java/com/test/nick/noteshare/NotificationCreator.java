@@ -30,7 +30,7 @@ public class NotificationCreator {
         this.frequency = frequency;
     }
 
-    public void createNotification(int time){
+    public void createNotification(long time){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             CharSequence name = "thicc notification";
@@ -61,8 +61,9 @@ public class NotificationCreator {
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, builder.build());
         PendingIntent broadcastIntent = PendingIntent.getBroadcast(this.context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + 10000;
-        Log.d(TAG, "createNotification: ==========" + System.currentTimeMillis() + "========= "+time);
+        //time = SystemClock.elapsedRealtime() + 10000;
+        time -= System.currentTimeMillis() - SystemClock.elapsedRealtime();
+        Log.d(TAG, "createNotification: ==========" + (SystemClock.elapsedRealtime()-time)/1000);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, time, broadcastIntent);
     }
