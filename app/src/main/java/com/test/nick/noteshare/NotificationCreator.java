@@ -22,15 +22,17 @@ public class NotificationCreator {
 
     private Context context;
     private Note note;
+    private long startTime;
     private NoteFrequency frequency;
 
-    public NotificationCreator(Context c, Note note, NotificationCreator.NoteFrequency frequency){
+    public NotificationCreator(Context c, Note note, long time, NotificationCreator.NoteFrequency frequency){
         this.context = c;
         this.note = note;
+        this.startTime = time;
         this.frequency = frequency;
     }
 
-    public void createNotification(long time){
+    public void createNotification(){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             CharSequence name = "thicc notification";
@@ -62,15 +64,17 @@ public class NotificationCreator {
         PendingIntent broadcastIntent = PendingIntent.getBroadcast(this.context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //time = SystemClock.elapsedRealtime() + 10000;
-        time -= System.currentTimeMillis() - SystemClock.elapsedRealtime();
-        Log.d(TAG, "createNotification: ==========" + (SystemClock.elapsedRealtime()-time)/1000);
+        startTime -= System.currentTimeMillis() - SystemClock.elapsedRealtime();
+        Log.d(TAG, "createNotification: ==========" + (SystemClock.elapsedRealtime() - startTime) / 1000);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, time, broadcastIntent);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, startTime, broadcastIntent);
     }
 
     public enum NoteFrequency{
         HIGH,
         MEDIUM,
-        LOW
+        LOW,
+        HOURLY,
+        DAILY
     }
 }

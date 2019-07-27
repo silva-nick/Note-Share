@@ -120,13 +120,12 @@ public class EventEditActivity extends AppCompatActivity {
         String [] info = note.body.split(MainActivity.breakCode);
         String [] date = info[0].split("/");
         String [] time = info[1].split(":");
-        LocalDateTime cal = LocalDateTime.of(2019,7,25, 18,2, 20);
-        LocalDateTime test = LocalDateTime.of(Integer.parseInt(date[2]), Integer.parseInt(date[1]), Integer.parseInt(date[0]), Integer.parseInt(time[0]), Integer.parseInt(time[1]), 0);
-        Log.d(TAG, "createEvent: " + date[2]+ date[1]+ date[0]);
+        LocalDateTime test = LocalDateTime.of(Integer.parseInt(date[2]), Integer.parseInt(date[1]),
+                Integer.parseInt(date[0]), Integer.parseInt(time[0]), Integer.parseInt(time[1]), 0);
         ZonedDateTime zdt = test.atZone(ZoneId.of("America/Chicago"));
 
-        NotificationCreator c = new NotificationCreator(this, note, getSpinner());
-        c.createNotification(zdt.toInstant().toEpochMilli());
+        NotificationCreator c = new NotificationCreator(this, note, zdt.toInstant().toEpochMilli(), getSpinner());
+        c.createNotification();
 
         Intent sendData = new Intent();
         sendData.putExtra("note", note);
