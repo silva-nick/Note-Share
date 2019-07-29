@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".EventEditActivity"></activity>
+        <activity android:name=".GoalEditActivity"></activity>
+        <activity android:name=".EventEditActivity" />
         <activity android:name=".CheckEditActivity" />
         <activity
             android:name=".StickyEditActivity"
@@ -33,6 +34,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
         <receiver android:name=".NotificationPublisher" />
         <receiver android:name=".NotificationButtonBroadcast" />
     </application>
