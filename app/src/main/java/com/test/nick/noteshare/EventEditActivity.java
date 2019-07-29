@@ -23,13 +23,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.test.nick.noteshare.data.Note;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 
 public class EventEditActivity extends AppCompatActivity {
     public static final String TAG = "EventEditActivity";
@@ -120,12 +114,9 @@ public class EventEditActivity extends AppCompatActivity {
         String [] info = note.body.split(MainActivity.breakCode);
         String [] date = info[0].split("/");
         String [] time = info[1].split(":");
-        LocalDateTime test = LocalDateTime.of(Integer.parseInt(date[2]), Integer.parseInt(date[1]),
-                Integer.parseInt(date[0]), Integer.parseInt(time[0]), Integer.parseInt(time[1]), 0);
-        ZonedDateTime zdt = test.atZone(ZoneId.of("America/Chicago"));
 
-        NotificationCreator c = new NotificationCreator(this, note, zdt.toInstant().toEpochMilli(), getSpinner());
-        c.createNotification();
+        NotificationCreator c = new NotificationCreator(this, note, date, time, getSpinner());
+        //c.createNotification();
 
         Intent sendData = new Intent();
         sendData.putExtra("note", note);
