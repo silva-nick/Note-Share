@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         addGoal.setX(x);
         addGoal.setY(y);
 
-        final Note testNote = new Note(0, "example", "Filler text used to test if this works", "");
+        final Note testNote = new Note(0, "", "", "");
 
         addSticky.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -228,6 +228,9 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 break;
             case 2 :
                 intent = new Intent(this, EventEditActivity.class);
+                break;
+            case 3 :
+                intent = new Intent(this, GoalEditActivity.class);
                 break;
             default:
                 intent = new Intent(this, StickyEditActivity.class);

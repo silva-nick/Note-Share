@@ -42,6 +42,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             case 2:
                 return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.event_note, viewGroup, false));
+            case 3:
+                return new ViewHolder((CardView)LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.goal_note, viewGroup, false));
             default:
                 return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.sticky_note, viewGroup, false));

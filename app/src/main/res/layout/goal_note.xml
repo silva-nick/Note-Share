@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
-    android:id="@+id/goal_nota">
+    android:id="@+id/goal_note">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,12 +23,12 @@
             android:scaleType="centerCrop"/>
 
         <TextView
-            android:id="@+id/goal_text"
+            android:id="@+id/note_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sticky_top"
-            android:background="@color/colorSticky"/>
+            app:layout_constraintTop_toBottomOf="@id/goal_top"
+            android:background="@color/design_default_color_primary"/>
 
         <ImageView
             android:id="@+id/goal_bot"
