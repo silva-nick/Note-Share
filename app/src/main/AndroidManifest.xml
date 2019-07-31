@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://sche mas.android.com/tools"
     package="com.test.nick.noteshare">
 
     <uses-permission android:name="android.permission.NFC" />
+    <uses-feature android:name="android.hardware.nfc"
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -23,13 +25,14 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
                 <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>

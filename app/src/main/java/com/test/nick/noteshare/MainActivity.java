@@ -18,7 +18,11 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
+import android.nfc.Tag;
+import android.nfc.tech.Ndef;
 import android.os.Bundle;
 
 import androidx.lifecycle.Observer;
@@ -30,11 +34,18 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Toast;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemListener{
+public class MainActivity extends AppCompatActivity
+        implements  NoteAdapter.ItemListener,
+                    NfcAdapter.OnNdefPushCompleteCallback,
+                    NfcAdapter.CreateNdefMessageCallback{
+
     private static final String TAG = "MainActivity";
     public static final String breakCode = "x92n";
 
@@ -43,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     private int focusPosition;
     private View focusView;
     private NoteViewModel bigData;
+
+    private NfcAdapter adapterNfc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +83,17 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
                 adapter.notifyDataSetChanged();
             }
         });
+
+        adapterNfc = NfcAdapter.getDefaultAdapter(this);
+        if(adapterNfc != null) {
+            adapterNfc.setOnNdefPushCompleteCallback(this, this);
+            adapterNfc.setNdefPushMessageCallback(this, this);
+        }
+        else {
+            Toast.makeText(this, "Your infantile device does not have NFC capabilities",
+                    Toast.LENGTH_SHORT).show();
+        }
+        handleNfcIntents(getIntent());
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -108,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
             sequenceAnimator.playSequentially(objectAnimator1, objectAnimator2);
             sequenceAnimator.start();
         }
+        handleNfcIntents(getIntent());
         super.onResume();
     }
 
@@ -244,27 +269,6 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
-            Parcelable[] rawMessages =
-                    intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            if (rawMessages != null) {
-                NdefMessage[] messages = new NdefMessage[rawMessages.length];
-                for (int i = 0; i < rawMessages.length; i++) {
-                    messages[i] = (NdefMessage) rawMessages[i];
-                }
-
-                for (int i = 0; i < messages.length; i++) {
-                    Log.d(TAG, "onNewIntent: " + messages[i].toString());
-                }
-
-            }
-        }
-    }
-
-    @Override
     public void onItemTap() {
         Log.d(TAG, "onItemTap: ");
         leaveActivity();
@@ -296,5 +300,82 @@ public class MainActivity extends AppCompatActivity implements NoteAdapter.ItemL
         Log.d(TAG, "sendEvent: " + pos);
         this.focusPosition = pos;
         this.focusView = v;
+    }
+
+    @Override
+    public void onNdefPushComplete(NfcEvent event){
+        //Message successfully sent
+        Toast.makeText(this, "Note Send!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public NdefMessage createNdefMessage (NfcEvent event){
+        //called when nfc device is registered
+        if (noteArrayList.get(focusPosition) == null) {
+            return null;
+        }
+        NdefRecord[] recordsToAttach = createRecords();
+        return new NdefMessage(recordsToAttach);
+    }
+
+    public NdefRecord[] createRecords() {
+
+        NdefRecord[] records = new NdefRecord[6];
+        Note sendNote = noteArrayList.get(focusPosition);
+
+        ByteBuffer bb = ByteBuffer.allocate(4);
+        bb.putInt(sendNote.nid);
+        byte[] payload = bb.array();
+        NdefRecord record = NdefRecord.createMime("text/plain", payload);
+        records[0] = record;
+
+        bb.clear();
+        bb.putInt(sendNote.type);
+        payload = bb.array();
+        record = NdefRecord.createMime("text/plain", payload);
+        records[1] = record;
+
+        payload = sendNote.title.getBytes(Charset.forName("UTF-8"));
+        record = NdefRecord.createMime("text/plain", payload);
+        records[2] = record;
+
+        payload = sendNote.title.getBytes(Charset.forName("UTF-8"));
+        record = NdefRecord.createMime("text/plain", payload);
+        records[3] = record;
+
+        payload = sendNote.title.getBytes(Charset.forName("UTF-8"));
+        record = NdefRecord.createMime("text/plain", payload);
+        records[4] = record;
+
+        records[5] = NdefRecord.createApplicationRecord(getPackageName());
+        return records;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleNfcIntents(intent);
+    }
+
+    private void handleNfcIntents(Intent intent){
+        Log.d(TAG, "handleNfcIntents: --------------------------------------------------------------------------------");
+        Log.d(TAG, "--------------------" + intent.getType());
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+            Log.d(TAG, "handleNfcIntents: AHDAEHGAIEI/egHsdoifleah;nselioubvasiudbv[iah");
+            Parcelable[] rawMessages =
+                    intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            if (rawMessages != null) {
+                NdefMessage receivedMessage = (NdefMessage) rawMessages[0];
+                NdefRecord[] attachedRecords = receivedMessage.getRecords();
+
+                for (int i = 0; i < 5; i++) {
+                    Log.d(TAG, "onNewIntent: " + attachedRecords[i].toString());
+                }
+
+            }
+        } else if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())){
+            //unformatted tag
+            Toast.makeText(this, "UNFORMATTED TAG FOUND", Toast.LENGTH_SHORT).show();
+        }
     }
 }
