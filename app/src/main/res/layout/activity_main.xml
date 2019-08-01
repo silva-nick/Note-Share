@@ -30,6 +30,15 @@
         android:focusable="true"
         android:onClick="addNote"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/grey_view"
+        android:visibility="invisible"
+        android:background="#000000"
+        android:alpha="0"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"

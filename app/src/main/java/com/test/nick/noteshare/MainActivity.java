@@ -3,9 +3,11 @@ package com.test.nick.noteshare;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.Dialog;
 import android.content.Intent;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.FlingAnimation;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -25,6 +27,8 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +36,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
@@ -287,8 +293,7 @@ public class MainActivity extends AppCompatActivity
         set.setDuration(1000);
         set.setInterpolator(new DecelerateInterpolator());
         set.start();
-        set.reverse();
-
+        //set.reverse();
         removeNote(focusPosition);
         //animation + delete note
     }
@@ -298,6 +303,38 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onItemHold: ");
         //use nfc to share notes
         nfcPosition = focusPosition;
+        View layout = findViewById(R.id.main_layout);
+        final View grey = findViewById(R.id.grey_view);
+        grey.setVisibility(View.VISIBLE);
+        grey.animate().alpha(.4f);
+        grey.setTranslationZ(.01f);
+
+        final View v = focusView;
+        ((ViewGroup)v.getParent()).removeView(v);
+        ((ViewGroup)layout).addView(v);
+
+        grey.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                ((ViewGroup)grey.getParent()).removeView(grey);
+                grey.setVisibility(View.INVISIBLE);
+                v.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        PropertyValuesHolder x2Scale = PropertyValuesHolder.ofFloat(View.SCALE_X, .75f);
+        PropertyValuesHolder y2Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f);
+        PropertyValuesHolder x2 = PropertyValuesHolder.ofFloat(View.X, (float)(v.getWidth()/2 - focusView.getWidth()/2));
+        PropertyValuesHolder y2 = PropertyValuesHolder.ofFloat(View.Y, 550f);
+        PropertyValuesHolder z2 = PropertyValuesHolder.ofFloat(View.Z, 5000f);
+        ObjectAnimator objectAnimator2 = ObjectAnimator.ofPropertyValuesHolder(v, x2Scale, x2, y2, y2Scale, z2);
+        objectAnimator2.setDuration(500);
+        objectAnimator2.setStartDelay(100);
+        objectAnimator2.setInterpolator(new DecelerateInterpolator());
+
+        AnimatorSet sequenceAnimator = new AnimatorSet();
+        sequenceAnimator.play(objectAnimator2);
+        sequenceAnimator.start();
     }
 
     @Override
