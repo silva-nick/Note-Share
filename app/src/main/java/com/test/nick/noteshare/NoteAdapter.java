@@ -68,8 +68,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
-        CardView cardView;
-        TextView text;
+        private CardView cardView;
+        private TextView text;
 
         ViewHolder(CardView view){
             super(view);

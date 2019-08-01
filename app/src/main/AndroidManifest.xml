@@ -33,7 +33,7 @@
                 <action android:name="android.nfc.action.TAG_DISCOVERED"/>
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.nfc.action.TECH_DISCOVERED"/>
-                <data android:mimeType="text/plain" />
+               <!-- <data android:mimeType="text/plain" /> -->
             </intent-filter>
         </activity>
         <receiver android:name=".NotificationPublisher" />

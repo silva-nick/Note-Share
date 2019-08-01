@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<Note> noteArrayList = new ArrayList<>();
     private NoteAdapter adapter;
     private int focusPosition;
+    private int nfcPosition = -1;
     private View focusView;
     private NoteViewModel bigData;
 
@@ -111,20 +112,23 @@ public class MainActivity extends AppCompatActivity
         if(focusView != null) {
             float startX = focusView.getX();
             float startY = focusView.getY();
+            float startZ = focusView.getZ();
 
             PropertyValuesHolder x1 = PropertyValuesHolder.ofFloat(View.X, 0f);
             PropertyValuesHolder y1 = PropertyValuesHolder.ofFloat(View.Y, 0f);
-            PropertyValuesHolder x1Scale = PropertyValuesHolder.ofFloat(View.SCALE_X, 2f);
+            PropertyValuesHolder x1Scale = PropertyValuesHolder.ofFloat(View.SCALE_X, 4f);
             PropertyValuesHolder y1Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, 15f);
-            ObjectAnimator objectAnimator1 = ObjectAnimator.ofPropertyValuesHolder(focusView, x1, y1, x1Scale, y1Scale);
+            PropertyValuesHolder z1 = PropertyValuesHolder.ofFloat(View.TRANSLATION_Z, 100f);
+            ObjectAnimator objectAnimator1 = ObjectAnimator.ofPropertyValuesHolder(focusView, x1, y1, x1Scale, y1Scale, z1);
             objectAnimator1.setDuration(0);
 
             PropertyValuesHolder x2 = PropertyValuesHolder.ofFloat(View.X, startX);
             PropertyValuesHolder y2 = PropertyValuesHolder.ofFloat(View.Y, startY);
             PropertyValuesHolder x2Scale = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f);
             PropertyValuesHolder y2Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f);
-            ObjectAnimator objectAnimator2 = ObjectAnimator.ofPropertyValuesHolder(focusView, x2, y2, x2Scale, y2Scale);
-            objectAnimator2.setDuration(400);
+            PropertyValuesHolder z2 = PropertyValuesHolder.ofFloat(View.TRANSLATION_Z, startZ);
+            ObjectAnimator objectAnimator2 = ObjectAnimator.ofPropertyValuesHolder(focusView, x2, y2, x2Scale, y2Scale, z2);
+            objectAnimator2.setDuration(500);
             objectAnimator2.setStartDelay(100);
             objectAnimator2.setInterpolator(new DecelerateInterpolator());
 
@@ -293,6 +297,7 @@ public class MainActivity extends AppCompatActivity
     public void onItemHold() {
         Log.d(TAG, "onItemHold: ");
         //use nfc to share notes
+        nfcPosition = focusPosition;
     }
 
     @Override
@@ -375,6 +380,9 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())){
             //unformatted tag
+            if(nfcPosition != -1){
+                //write to the tag
+            }
             Toast.makeText(this, "UNFORMATTED TAG FOUND", Toast.LENGTH_SHORT).show();
         }
     }
