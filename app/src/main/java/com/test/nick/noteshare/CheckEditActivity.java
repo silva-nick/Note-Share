@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -33,17 +34,21 @@ public class CheckEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.check_edit);
 
-        RecyclerView recyclerView = findViewById(R.id.recycle_check);
+        final RecyclerView recyclerView = findViewById(R.id.recycle_check);
         recyclerView.setPreserveFocusAfterLayout(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
+        params.height = findViewById(R.id.check_edit).getHeight() - findViewById(R.id.check_frame).getHeight();
+        recyclerView.setLayoutParams(params);
+
 
         note = getIntent().getParcelableExtra("note");
         EditText title = findViewById(R.id.check_title);
         title.setText(note.title);
 
         checkList = new ArrayList<String>(Arrays.asList(note.body.split(MainActivity.breakCode)));
-        if (!checkList.get(checkList.size() - 1).equals("-100")){checkList.add(checkList.size(), "-100");}
         adapter = new CheckAdapter(checkList);
         recyclerView.setAdapter(adapter);
 
@@ -58,8 +63,10 @@ public class CheckEditActivity extends AppCompatActivity {
         title.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                checkList.add(checkList.size() - 1, "");
-                adapter.notifyDataSetChanged();
+                int pos = 0;
+                checkList.add(pos, "");
+                adapter.notifyItemInserted(pos);
+                recyclerView.smoothScrollToPosition(pos);
                 return false;
             }
         });

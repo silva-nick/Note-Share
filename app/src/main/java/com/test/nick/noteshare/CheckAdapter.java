@@ -31,10 +31,6 @@ public class CheckAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
-        if (type == 1){
-            return new ViewHolder1((LinearLayout) LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.check_plus, viewGroup, false));
-        }
 
         ViewHolder v = new ViewHolder((LinearLayout) LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.check, viewGroup, false));
@@ -50,9 +46,6 @@ public class CheckAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int index) {
-        if (data.get(index).equals("-100")){
-            return;
-        }
         ((ViewHolder)viewHolder).listener.setPosition(index);
         ((ViewHolder)viewHolder).text.setText(data.get(index));
     }
@@ -109,14 +102,6 @@ public class CheckAdapter extends RecyclerView.Adapter {
             layout.findViewById(R.id.check_delete).setVisibility(View.VISIBLE);
         }
     }
-
-    public class ViewHolder1 extends RecyclerView.ViewHolder{
-        ViewHolder1(LinearLayout view){
-            super(view);
-            Log.d(TAG, "ViewHolder: " + view.toString());
-        }
-    }
-
 
     private class TextListener implements TextWatcher {
         private int position;
