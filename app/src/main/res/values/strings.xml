@@ -14,4 +14,6 @@
     <string name="event_description">Describe the event here..</string>
     <string name="event_create">Create Event</string>
     <string name="event_importance">How important is your event?: </string>
+    <string name="share_nfc">Tap to share this note!</string>
 </resources>
+

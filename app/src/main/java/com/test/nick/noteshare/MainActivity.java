@@ -9,6 +9,7 @@ import android.content.Intent;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.FlingAnimation;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -344,7 +345,8 @@ public class MainActivity extends AppCompatActivity
         grey.animate().alpha(.4f);
         grey.setTranslationZ(.01f);
 
-        final View v = focusView;
+        final CardView v = (CardView) focusView;
+
         ((ViewGroup)v.getParent()).removeView(v);
         ((ViewGroup)layout).addView(v);
 
@@ -358,18 +360,16 @@ public class MainActivity extends AppCompatActivity
         grey.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                ((ViewGroup)grey.getParent()).removeView(grey);
                 grey.setVisibility(View.INVISIBLE);
                 v.setVisibility(View.INVISIBLE);
             }
         });
 
-        //focusView.setVisibility(View.INVISIBLE);
 
         PropertyValuesHolder x2Scale = PropertyValuesHolder.ofFloat(View.SCALE_X, .75f);
         PropertyValuesHolder y2Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, .75f);
         PropertyValuesHolder x2 = PropertyValuesHolder.ofFloat(View.X, (float)(v.getWidth()/2 - focusView.getWidth()/2));
-        PropertyValuesHolder y2 = PropertyValuesHolder.ofFloat(View.Y, 550f);
+        PropertyValuesHolder y2 = PropertyValuesHolder.ofFloat(View.Y, 650f);
         PropertyValuesHolder z2 = PropertyValuesHolder.ofFloat(View.Z, 5000f);
         ObjectAnimator objectAnimator2 = ObjectAnimator.ofPropertyValuesHolder(v, x2Scale, x2, y2, y2Scale, z2);
         objectAnimator2.setDuration(500);

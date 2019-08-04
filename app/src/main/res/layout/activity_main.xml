@@ -30,9 +30,10 @@
         android:focusable="true"
         android:onClick="addNote"/>
 
-    <View
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/share_nfc"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/grey_view"
         android:visibility="invisible"
