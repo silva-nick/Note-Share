@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Intent;
 
 import androidx.annotation.Nullable;
@@ -19,6 +20,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.IntentFilter;
+import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -42,6 +45,8 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -58,11 +63,11 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<Note> noteArrayList = new ArrayList<>();
     private NoteAdapter adapter;
     private int focusPosition;
-    private int nfcPosition = -1;
     private View focusView;
     private NoteViewModel bigData;
 
     private NfcAdapter adapterNfc;
+    private boolean isRead = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +93,7 @@ public class MainActivity extends AppCompatActivity
                 noteArrayList.clear(); //This is bad programming :)
                 noteArrayList.addAll(0, notes);
                 adapter.notifyDataSetChanged();
+                Log.d(TAG, "onChanged: -------------------------" + noteArrayList.size());
             }
         });
 
@@ -113,7 +119,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume(){
+        super.onResume();
         Log.d(TAG, "onResume:" + focusView);
+
         //when going back to main act, animates card
         if(focusView != null) {
             float startX = focusView.getX();
@@ -142,12 +150,37 @@ public class MainActivity extends AppCompatActivity
             sequenceAnimator.playSequentially(objectAnimator1, objectAnimator2);
             sequenceAnimator.start();
         }
+
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        IntentFilter techDetected = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
+        IntentFilter[] nfcIntentFilter = new IntentFilter[]{techDetected,tagDetected,ndefDetected};
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        if(adapterNfc!= null)
+            adapterNfc.enableForegroundDispatch(this, pendingIntent, nfcIntentFilter, null);
+
         handleNfcIntents(getIntent());
-        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(adapterNfc!= null)
+            adapterNfc.disableForegroundDispatch(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleNfcIntents(intent);
     }
 
     public void addNote(View view){
         Log.d(TAG, "addNote: Floating action button pressed");
+
+        Log.d(TAG, "onCreate: " + findViewById(R.id.recycle_view).getWidth());
 
         final int insertIndex = 0;
 
@@ -245,6 +278,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void removeNote(int removeIndex){
+        Log.d(TAG, "removeNote: deleting a note");
         bigData.delete(noteArrayList.get(removeIndex));
         noteArrayList.remove(removeIndex);
         adapter.notifyItemRemoved(removeIndex);
@@ -302,7 +336,8 @@ public class MainActivity extends AppCompatActivity
     public void onItemHold() {
         Log.d(TAG, "onItemHold: ");
         //use nfc to share notes
-        nfcPosition = focusPosition;
+        isRead = false;
+
         View layout = findViewById(R.id.main_layout);
         final View grey = findViewById(R.id.grey_view);
         grey.setVisibility(View.VISIBLE);
@@ -313,6 +348,13 @@ public class MainActivity extends AppCompatActivity
         ((ViewGroup)v.getParent()).removeView(v);
         ((ViewGroup)layout).addView(v);
 
+        v.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //send nfc message
+            }
+        });
+
         grey.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -322,8 +364,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        //focusView.setVisibility(View.INVISIBLE);
+
         PropertyValuesHolder x2Scale = PropertyValuesHolder.ofFloat(View.SCALE_X, .75f);
-        PropertyValuesHolder y2Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f);
+        PropertyValuesHolder y2Scale = PropertyValuesHolder.ofFloat(View.SCALE_Y, .75f);
         PropertyValuesHolder x2 = PropertyValuesHolder.ofFloat(View.X, (float)(v.getWidth()/2 - focusView.getWidth()/2));
         PropertyValuesHolder y2 = PropertyValuesHolder.ofFloat(View.Y, 550f);
         PropertyValuesHolder z2 = PropertyValuesHolder.ofFloat(View.Z, 5000f);
@@ -353,9 +397,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public NdefMessage createNdefMessage (NfcEvent event){
         //called when nfc device is registered
-        if (noteArrayList.get(focusPosition) == null) {
-            return null;
-        }
+        Log.d(TAG, "createNdefMessage:  Called to create ndef message");
         NdefRecord[] recordsToAttach = createRecords();
         return new NdefMessage(recordsToAttach);
     }
@@ -381,11 +423,11 @@ public class MainActivity extends AppCompatActivity
         record = NdefRecord.createMime("text/plain", payload);
         records[2] = record;
 
-        payload = sendNote.title.getBytes(Charset.forName("UTF-8"));
+        payload = sendNote.body.getBytes(Charset.forName("UTF-8"));
         record = NdefRecord.createMime("text/plain", payload);
         records[3] = record;
 
-        payload = sendNote.title.getBytes(Charset.forName("UTF-8"));
+        payload = sendNote.extra.getBytes(Charset.forName("UTF-8"));
         record = NdefRecord.createMime("text/plain", payload);
         records[4] = record;
 
@@ -393,16 +435,47 @@ public class MainActivity extends AppCompatActivity
         return records;
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleNfcIntents(intent);
-    }
-
     private void handleNfcIntents(Intent intent){
         Log.d(TAG, "handleNfcIntents: --------------------------------------------------------------------------------");
-        Log.d(TAG, "--------------------" + intent.getType());
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+        if(tag != null) {
+            Ndef ndef = Ndef.get(tag);
+
+            if(isRead){
+                try {
+                    ndef.connect();
+                    Log.d(TAG, "handleNfcIntents: Trying to READ from tag");
+                    NdefMessage message = ndef.getNdefMessage();
+                    NdefRecord[] records = message.getRecords();
+
+                    Note tagNote = getNoteFromNfc(records);
+                    bigData.insert(tagNote);
+
+                    String string = new String(message.getRecords()[2].getPayload());
+                    Toast.makeText(this, string, Toast.LENGTH_LONG).show();
+                    //create new note with payloads
+                    ndef.close();
+                } catch (IOException | FormatException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                try {
+                    isRead = true;
+                    ndef.connect();
+                    Log.d(TAG, "handleNfcIntents: Trying to WRITE to tag");
+                    NdefRecord[] recordsToAttach = createRecords();
+                    ndef.writeNdefMessage(new NdefMessage(recordsToAttach));
+                    ndef.close();
+                } catch (IOException | FormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        /*if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
             Log.d(TAG, "handleNfcIntents: AHDAEHGAIEI/egHsdoifleah;nselioubvasiudbv[iah");
             Parcelable[] rawMessages =
                     intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
@@ -421,6 +494,17 @@ public class MainActivity extends AppCompatActivity
                 //write to the tag
             }
             Toast.makeText(this, "UNFORMATTED TAG FOUND", Toast.LENGTH_SHORT).show();
-        }
+        }*/
+    }
+
+    private Note getNoteFromNfc(NdefRecord[] records){
+        Note output = new Note(-1, "", "", "");
+
+        output.type = new BigInteger(records[1].getPayload()).intValue();
+        output.title = new String(records[3].getPayload());
+        output.body = new String(records[4].getPayload());
+        output.extra = new String(records[5].getPayload());
+
+        return output;
     }
 }

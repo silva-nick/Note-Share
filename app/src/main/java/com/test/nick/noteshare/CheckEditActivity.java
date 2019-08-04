@@ -34,7 +34,7 @@ public class CheckEditActivity extends AppCompatActivity {
         setContentView(R.layout.check_edit);
 
         RecyclerView recyclerView = findViewById(R.id.recycle_check);
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setPreserveFocusAfterLayout(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
