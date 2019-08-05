@@ -39,15 +39,11 @@ public class CheckAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (data.get(position).equals("-100")){return 1;}
-        return 0;
-    }
-
-    @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int index) {
         ((ViewHolder)viewHolder).listener.setPosition(index);
-        ((ViewHolder)viewHolder).text.setText(data.get(index));
+        ((ViewHolder)viewHolder).text.setText(data.get(index).substring(1));
+        ((ViewHolder)viewHolder).box.setChecked(data.get(index).charAt(0) == 't');
+        Log.d(TAG, "onBindViewHolder:        " + data.get(index));
     }
 
     @Override
@@ -73,33 +69,40 @@ public class CheckAdapter extends RecyclerView.Adapter {
             text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    data.add(data.size() - 1, "");
+                    data.add(data.size(), "t");
                     //update the arraylist
                     getAdapter().notifyDataSetChanged();
                     return false;
                 }
             });
-            text.setFocusedByDefault(true);
+
             layout = view;
 
-            view.findViewById(R.id.check_delete).setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    data.remove(0);
-                    notifyDataSetChanged();
-                }
-            });
-
             box = view.findViewById(R.id.check);
-            view.setOnClickListener(this);
+            box.setOnClickListener(this);
             listener = new TextListener();
             this.text.addTextChangedListener(listener);
         }
 
         @Override
         public void onClick(View view) {
-            box.setChecked(!box.isChecked());
-            layout.findViewById(R.id.check_delete).setVisibility(View.VISIBLE);
+            boolean val = box.isChecked();
+            if(val){
+                Button delete = new Button(layout.getContext());
+                delete.setAlpha(0f);
+                layout.addView(delete);
+                delete.animate().alpha(1f).setDuration(750);
+                delete.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        data.remove(0);
+                        layout.removeViewAt(layout.getChildCount() - 1);
+                        notifyDataSetChanged();
+                    }
+                });
+            } else {layout.removeViewAt(layout.getChildCount() - 1);}
+            data.set(getAdapterPosition(),  data.get(getAdapterPosition()).replaceFirst(val ? "f" : "t", val ? "t" : "f"));
+            Log.d(TAG, "onClick: " + val + "-----------" + data.get(getAdapterPosition()));
         }
     }
 
@@ -115,7 +118,7 @@ public class CheckAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-            data.set(position, charSequence.toString());
+            data.set(position, data.get(position).charAt(0) + charSequence.toString());
         }
 
         @Override

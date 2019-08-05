@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v){
                 //add checknote and append to text
                 testNote.type = 1;
+                testNote.body = "tFinish the app";
                 bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v) - 1, 4);
             }
@@ -350,13 +351,6 @@ public class MainActivity extends AppCompatActivity
         ((ViewGroup)v.getParent()).removeView(v);
         ((ViewGroup)layout).addView(v);
 
-        v.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                //send nfc message
-            }
-        });
-
         grey.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -452,11 +446,13 @@ public class MainActivity extends AppCompatActivity
                     Note tagNote = getNoteFromNfc(records);
                     bigData.insert(tagNote);
 
-                    String string = new String(message.getRecords()[2].getPayload());
-                    Toast.makeText(this, string, Toast.LENGTH_LONG).show();
-                    //create new note with payloads
                     ndef.close();
-                } catch (IOException | FormatException e) {
+                    return;
+
+                } catch (IOException | NullPointerException | FormatException e) {
+                    if (e instanceof NullPointerException){
+                        Toast.makeText(this, "Your tag hasn't been written to!", Toast.LENGTH_LONG).show();
+                    }
                     e.printStackTrace();
                 }
 
@@ -466,16 +462,19 @@ public class MainActivity extends AppCompatActivity
                     ndef.connect();
                     Log.d(TAG, "handleNfcIntents: Trying to WRITE to tag");
                     NdefRecord[] recordsToAttach = createRecords();
-                    ndef.writeNdefMessage(new NdefMessage(recordsToAttach));
+                    NdefMessage m = new NdefMessage(recordsToAttach);
+                    Log.d(TAG, "handleNfcIntents:        " + m.toString());
+                    ndef.writeNdefMessage(m);
                     ndef.close();
+                    return;
+
                 } catch (IOException | FormatException e) {
                     e.printStackTrace();
                 }
             }
         }
 
-
-        /*if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
             Log.d(TAG, "handleNfcIntents: AHDAEHGAIEI/egHsdoifleah;nselioubvasiudbv[iah");
             Parcelable[] rawMessages =
                     intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
@@ -490,20 +489,17 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())){
             //unformatted tag
-            if(nfcPosition != -1){
-                //write to the tag
-            }
             Toast.makeText(this, "UNFORMATTED TAG FOUND", Toast.LENGTH_SHORT).show();
-        }*/
+        }
     }
 
     private Note getNoteFromNfc(NdefRecord[] records){
         Note output = new Note(-1, "", "", "");
 
         output.type = new BigInteger(records[1].getPayload()).intValue();
-        output.title = new String(records[3].getPayload());
-        output.body = new String(records[4].getPayload());
-        output.extra = new String(records[5].getPayload());
+        output.title = new String(records[2].getPayload());
+        output.body = new String(records[3].getPayload());
+        output.extra = new String(records[4].getPayload());
 
         return output;
     }

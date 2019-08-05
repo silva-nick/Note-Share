@@ -64,7 +64,7 @@ public class CheckEditActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 int pos = 0;
-                checkList.add(pos, "");
+                checkList.add(pos, "f");
                 adapter.notifyItemInserted(pos);
                 recyclerView.smoothScrollToPosition(pos);
                 return false;
@@ -90,7 +90,7 @@ public class CheckEditActivity extends AppCompatActivity {
 
     public void addCheck(View v){
         Log.d(TAG, "addCheck: ");
-        checkList.add(checkList.size() - 1, "");
+        checkList.add(checkList.size() - 1, "f");
         adapter.notifyDataSetChanged();
     }
 }
