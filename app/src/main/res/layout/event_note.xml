@@ -23,7 +23,7 @@
             android:scaleType="centerCrop"/>
 
         <TextView
-            android:id="@+id/note_text"
+            android:id="@+id/note_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toLeftOf="parent"
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/note_text"
+            app:layout_constraintTop_toBottomOf="@id/note_title"
             android:src="@drawable/sticky_bottom"
             android:scaleType="centerCrop"/>
     </LinearLayout>

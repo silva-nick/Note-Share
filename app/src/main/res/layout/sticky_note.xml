@@ -14,14 +14,32 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/sticky_top"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/sticky_top"
-            android:scaleType="centerCrop"/>
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/sticky_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/sticky_top"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_gravity="top|start"/>
+
+            <TextView
+                android:id="@+id/note_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:layout_marginLeft="65dp"
+                android:layout_marginTop="-8dp"
+                android:hint="@string/title"
+                android:textColorHint="@color/hintText"
+                android:background="@color/colorSticky"
+                android:layout_gravity="center_vertical|end"/>
+          </FrameLayout>
 
         <TextView
             android:id="@+id/note_text"
@@ -29,6 +47,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintRight_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sticky_top"
+            android:padding="8dp"
             android:background="@color/colorSticky"/>
 
         <ImageView

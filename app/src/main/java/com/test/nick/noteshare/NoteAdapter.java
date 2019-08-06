@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.test.nick.noteshare.data.Note;
@@ -34,10 +36,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int type) {
         switch (type){
             case 0:
-                return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
+                return new StickyViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.sticky_note, viewGroup, false));
             case 1:
-                return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
+                return new CheckViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.check_note, viewGroup, false));
             case 2:
                 return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
@@ -53,7 +55,28 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int index) {
-        viewHolder.text.setText(data.get(index).nid+"---"+data.get(index).title);
+        switch (viewHolder.getItemViewType()){
+            case 0:
+                viewHolder.title.setText(data.get(index).title);
+                ((StickyViewHolder)viewHolder).bodyText.setText(data.get(index).body);
+                break;
+            case 1:
+                CheckViewHolder c = (CheckViewHolder) viewHolder;
+                c.title.setText(data.get(index).title);
+                String [] miniArray = data.get(index).body.split(MainActivity.breakCode);
+                c.miniList.removeAllViews();
+                for (int i = 0; i< miniArray.length; i++){
+                    LinearLayout temp = (LinearLayout) LayoutInflater.from(context)
+                            .inflate(R.layout.check_note_check, c.miniList, false);
+                    ((TextView)temp.findViewById(R.id.check_text)).setText(miniArray[i].substring(1));
+                    ((CheckBox)temp.findViewById(R.id.check)).setChecked((miniArray[i].charAt(0)== 't'));
+                    c.miniList.addView(temp);
+                }
+                break;
+            case 2:
+
+        }
+
     }
 
     @Override
@@ -69,13 +92,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
         private CardView cardView;
-        private TextView text;
+        public TextView title;
 
         ViewHolder(CardView view){
             super(view);
             Log.d(TAG, "ViewHolder: " + view.toString());
             cardView = view;
-            text = cardView.findViewById(R.id.note_text);
+            title = cardView.findViewById(R.id.note_title);
             gestureDetector = new GestureDetectorCompat(context, new GestureListener());
             view.setOnTouchListener(this);
         }
@@ -88,6 +111,40 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             return true;
         }
     }
+
+    private class StickyViewHolder extends NoteAdapter.ViewHolder{
+        private TextView bodyText;
+
+        StickyViewHolder(CardView view){
+            super(view);
+            bodyText = view.findViewById(R.id.note_text);
+        }
+    }
+
+    private class CheckViewHolder extends NoteAdapter.ViewHolder{
+        private LinearLayout miniList;
+
+        CheckViewHolder(CardView view){
+            super(view);
+            miniList = view.findViewById(R.id.mini_check_list);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void setListeners(ItemListener iListener){
         this.itemListener = iListener;
