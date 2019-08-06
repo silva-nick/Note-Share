@@ -9,6 +9,8 @@ import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -55,11 +57,14 @@ public class GoalEditActivity extends AppCompatActivity {
             completion[0] = Integer.parseInt(note.extra.split(MainActivity.breakCode)[0]);
             completion[1] = Integer.parseInt(note.extra.split(MainActivity.breakCode)[1]);
         } else {
-            completion[0] = 0;
-            completion[1] = 1;
+            completion[0] = 5;
+            completion[1] = 6;
         }
-
-        (findViewById(R.id.goal_runner)).setX(findViewById(R.id.goal_runner_layout).getWidth() * (completion[0]/completion[1]) );
+        completion[0] = 6;
+        completion[1] = 6;
+        float runnerX = 800 * ((float)completion[0]/(float)completion[1]);
+        (findViewById(R.id.goal_runner)).animate().translationX(runnerX)
+                .setDuration(1000).setInterpolator(new DecelerateInterpolator());
 
         final Button dateButton = findViewById(R.id.goal_date);
         dateButton.setOnClickListener(new View.OnClickListener() {
@@ -85,13 +90,33 @@ public class GoalEditActivity extends AppCompatActivity {
 
     public void createGoal(View v){
         EditText text = findViewById(R.id.goal_title);
+        Spinner freq = findViewById(R.id.goal_freq_spinner);
+        completion [1] = freq.getSelectedItemPosition() + 1;
         note.title = text.getText().toString();
         note.body = formatBody();
+        note.extra = completion[0] + MainActivity.breakCode + completion[1];
+
+        String [] date = ((Button)findViewById(R.id.goal_date)).getText().toString().split("/");
+
+        NotificationCreator c = new NotificationCreator(this, note, date, getFreq(), completion);
 
         Intent sendData = new Intent();
         sendData.putExtra("note", note);
         setResult(RESULT_OK, sendData);
         finish();
+    }
+
+    private NotificationCreator.NoteFrequency getFreq(){
+        String x = ((Spinner)findViewById(R.id.goal_time_spinner)).getSelectedItem().toString();
+        switch (x){
+            case "Day":
+                return NotificationCreator.NoteFrequency.DAY;
+            case "Week":
+                return NotificationCreator.NoteFrequency.WEEK;
+            case "Month":
+                return NotificationCreator.NoteFrequency.MONTH;
+        }
+        return null;
     }
 
     private String formatBody(){

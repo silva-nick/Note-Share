@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.annotation.Nullable;
@@ -35,6 +37,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
     public static final String breakCode = "x92n";
+    public static final String ACTION_UPDATE_GOAL = "updateGoal";
 
     private ArrayList<Note> noteArrayList = new ArrayList<>();
     private NoteAdapter adapter;
@@ -107,7 +111,10 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "Your infantile device does not have NFC capabilities",
                     Toast.LENGTH_SHORT).show();
         }
-        handleNfcIntents(getIntent());
+
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(goalReceiver, new IntentFilter(ACTION_UPDATE_GOAL));
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -503,4 +510,11 @@ public class MainActivity extends AppCompatActivity
 
         return output;
     }
+
+    BroadcastReceiver goalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            bigData.update((Note)intent.getParcelableExtra("note"));
+        }
+    };
 }

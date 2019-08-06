@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.test.nick.noteshare.data.Note;
 
 public class NotificationButtonBroadcast extends BroadcastReceiver {
@@ -31,6 +33,11 @@ public class NotificationButtonBroadcast extends BroadcastReceiver {
         }
         else if(action.equals("dismiss")) {
             notificationManager.cancelAll();
+        }
+        else if(action.equals("completed")){
+            Intent i = new Intent(MainActivity.ACTION_UPDATE_GOAL);
+            i.putExtra("note", note);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(i);
         }
     }
 }

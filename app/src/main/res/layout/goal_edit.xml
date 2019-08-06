@@ -6,7 +6,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/transparent"
     android:orientation="vertical"
-    tools:context=".GoalEditActivity">
+    tools:context=".GoalEditActivity"
+    android:id="@+id/goal_main">
 
     <Button
         android:id="@+id/goal_back"
