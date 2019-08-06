@@ -34,8 +34,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/share_nfc"
+        android:textSize="36sp"
+        android:textColor="@color/design_default_color_primary"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/grey_view"
+        android:gravity="center"
         android:visibility="invisible"
         android:background="#000000"
         android:alpha="0"/>
