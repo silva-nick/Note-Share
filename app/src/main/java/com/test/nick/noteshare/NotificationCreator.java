@@ -91,7 +91,7 @@ public class NotificationCreator {
         PendingIntent pendingCompletedIntent = PendingIntent.getBroadcast(this.context, (int)(Math.random()*1000), completedIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Builder builder = new Notification.Builder(this.context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.temp)
+                .setSmallIcon(R.drawable.app_logo)
                 .setContentTitle(note.title)
                 .addAction(R.drawable.temp, "Snooze", pendingSnoozeIntent)
                 .addAction(R.drawable.temp, "Completed!", pendingCompletedIntent)
@@ -158,7 +158,7 @@ public class NotificationCreator {
         PendingIntent pendingDismissIntent = PendingIntent.getBroadcast(this.context, (int)(Math.random()*1000), dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Builder builder = new Notification.Builder(this.context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.temp)
+            .setSmallIcon(R.drawable.app_logo)
             .setContentTitle(note.title)
             .setContentText(getDescription(note.body))
             .addAction(R.drawable.temp, "Snooze", pendingSnoozeIntent)

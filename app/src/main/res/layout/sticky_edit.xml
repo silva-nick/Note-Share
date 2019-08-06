@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/transparent">
 
-    <Button
-        android:id="@+id/sticky_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/back_button"
-        android:layout_weight="0" />
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +15,7 @@
             android:id="@+id/sticky_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/sticky_top"
+            android:src="@drawable/sticky_top_big"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:layout_gravity="top|start"/>
@@ -33,13 +24,24 @@
             android:id="@+id/sticky_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:layout_marginLeft="125dp"
+            android:textSize="48sp"
+            android:layout_marginLeft="32dp"
             android:inputType="textCapSentences"
             android:hint="@string/title"
             android:textColorHint="@color/hintText"
-            android:background="@color/colorSticky"
+            android:background="@color/sticky"
             android:layout_gravity="center_vertical|end"/>
+
+        <Button
+            android:id="@+id/sticky_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="24dp"
+            android:translationZ="0dp"
+            android:padding="2dp"
+            android:text="Back"
+            android:background="@color/sticky"
+            android:layout_gravity="right|center_vertical" />
 
     </FrameLayout>
 
@@ -53,7 +55,7 @@
         android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
         android:hint="@string/body"
         android:textColorHint="@color/hintText"
-        android:background="@color/colorSticky"
+        android:background="@color/sticky"
         android:layout_weight="1"
         android:imeOptions=""/>
 
@@ -61,7 +63,7 @@
         android:id="@+id/sticky_bot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/sticky_bottom"
+        android:src="@drawable/sticky_bot_big"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>
 

@@ -208,10 +208,10 @@ public class MainActivity extends AppCompatActivity
         layout.addView(addEvent);
         layout.addView(addGoal);
 
-        addSticky.setImageDrawable(getDrawable(R.drawable.temp));
-        addCheck.setImageDrawable(getDrawable(R.drawable.temp));
-        addEvent.setImageDrawable(getDrawable(R.drawable.temp));
-        addGoal.setImageDrawable(getDrawable(R.drawable.temp));
+        addSticky.setImageDrawable(this.getDrawable(R.drawable.sticky_note_button));
+        addCheck.setImageDrawable(this.getDrawable(R.drawable.check_button));
+        addEvent.setImageDrawable(this.getDrawable(R.drawable.event_button));
+        addGoal.setImageDrawable(this.getDrawable(R.drawable.goal_button));
 
         addSticky.setSize(FloatingActionButton.SIZE_MINI);
         addSticky.setX(x);

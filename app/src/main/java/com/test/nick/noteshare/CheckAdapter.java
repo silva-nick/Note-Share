@@ -3,6 +3,11 @@ package com.test.nick.noteshare;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,10 +27,12 @@ public class CheckAdapter extends RecyclerView.Adapter {
     private static final String TAG = "NoteAdapter";
 
     private ArrayList<String> data;
+    Context context;
 
-    public CheckAdapter(ArrayList<String> words){
+    public CheckAdapter(ArrayList<String> words, Context c){
         super();
         data = words;
+        context = c;
     }
 
     @NonNull
@@ -90,6 +97,9 @@ public class CheckAdapter extends RecyclerView.Adapter {
             if(val){
                 Button delete = new Button(layout.getContext());
                 delete.setAlpha(0f);
+                delete.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
+                delete.setPadding(14,4,14,14);
+                delete.setBackground(context.getDrawable(R.drawable.trash));
                 layout.addView(delete);
                 delete.animate().alpha(1f).setDuration(750);
                 delete.setOnClickListener(new View.OnClickListener(){

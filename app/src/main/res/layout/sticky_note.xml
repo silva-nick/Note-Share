@@ -23,7 +23,7 @@
                 android:id="@+id/sticky_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/sticky_top"
+                android:src="@drawable/sticky_top_small"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:layout_gravity="top|start"/>
@@ -33,12 +33,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:layout_marginLeft="65dp"
-                android:layout_marginTop="-8dp"
+                android:padding="8dp"
+                android:textColor="#000000"
                 android:hint="@string/title"
                 android:textColorHint="@color/hintText"
-                android:background="@color/colorSticky"
-                android:layout_gravity="center_vertical|end"/>
+                android:background="@color/sticky"
+                android:layout_gravity="center_horizontal"/>
           </FrameLayout>
 
         <TextView
@@ -47,8 +47,9 @@
             android:layout_height="wrap_content"
             app:layout_constraintRight_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sticky_top"
-            android:padding="8dp"
-            android:background="@color/colorSticky"/>
+            android:paddingHorizontal="8dp"
+            android:layout_marginTop="-16dp"
+            android:background="@color/sticky"/>
 
         <ImageView
             android:id="@+id/sticky_bot"
@@ -56,7 +57,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/note_text"
-            android:src="@drawable/sticky_bottom"
+            android:src="@drawable/sticky_bot_small"
             android:scaleType="centerCrop"/>
     </LinearLayout>
 

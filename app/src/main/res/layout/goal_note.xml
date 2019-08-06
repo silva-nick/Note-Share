@@ -11,7 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/goal">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -22,7 +23,7 @@
                 android:id="@+id/goal_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/sticky_top"
+                android:src="@drawable/goal_top_small"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:layout_gravity="top|start"/>
@@ -32,23 +33,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:layout_marginLeft="65dp"
+                android:paddingHorizontal="6dp"
                 android:layout_marginTop="-8dp"
                 android:hint="@string/title"
                 android:textColorHint="@color/hintText"
-                android:background="@color/colorSticky"
+                android:background="@color/goal"
                 android:layout_gravity="center_vertical|end"/>
         </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-20dp"
+            android:paddingHorizontal="4dp"
             android:id="@+id/goal_completion"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@color/goal">
 
             <ImageView
                 android:layout_width="30dp"
@@ -58,7 +62,7 @@
                 android:id="@+id/goal_runner"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/temp"
+                android:src="@drawable/runner"
                 android:contentDescription="@string/goal_date"/>
             <ImageView
                 android:layout_width="30dp"
@@ -69,7 +73,7 @@
                 android:layout_gravity="end"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/temp"
+                android:src="@drawable/finish_line"
                 android:contentDescription="@string/goal_date"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -79,7 +83,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/note_title"
-            android:src="@drawable/sticky_bottom"
+            android:src="@drawable/goal_bot_small"
             android:scaleType="centerCrop"/>
     </LinearLayout>
 

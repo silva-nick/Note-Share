@@ -49,7 +49,7 @@ public class CheckEditActivity extends AppCompatActivity {
         title.setText(note.title);
 
         checkList = new ArrayList<String>(Arrays.asList(note.body.split(MainActivity.breakCode)));
-        adapter = new CheckAdapter(checkList);
+        adapter = new CheckAdapter(checkList, this);
         recyclerView.setAdapter(adapter);
 
         Button backButton = findViewById(R.id.check_back);

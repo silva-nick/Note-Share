@@ -2,9 +2,12 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#C1D0F7</color>
     <color name="colorSticky">#F4F382</color>
     <color name="transparent">#00000000</color>
-    <color name="white"></color>
     <color name="hintText">#80000000</color>
+    <color name="event">#F8F5EC</color>
+    <color name="goal">#D5F79F</color>
+    <color name="check">#FFFFFF</color>
+    <color name="sticky">#FFFF6E</color>
 </resources>
