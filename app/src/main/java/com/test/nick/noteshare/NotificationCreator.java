@@ -55,14 +55,15 @@ public class NotificationCreator {
         this.context = c;
         this.note = note;
 
-        LocalDateTime test = LocalDateTime.of(Integer.parseInt(date[2]), Integer.parseInt(date[1]),
-                Integer.parseInt(date[0]), 0, 0 ,0);
+        LocalDateTime test = LocalDateTime.of(Integer.parseInt(date[2]), Integer.parseInt(date[0]),
+                Integer.parseInt(date[1]), 0, 0 ,0);
+        Log.d(TAG, "NotificationCreator: " + test.toString());
         ZonedDateTime zdt = test.atZone(ZoneId.of("America/Chicago"));
         this.startTime = zdt.toInstant().toEpochMilli();
 
         this.frequency = frequency;
 
-        createGoalNotification(startTime, frequency, completion);
+        createGoalNotification(startTime - System.currentTimeMillis() + SystemClock.elapsedRealtime(), frequency, completion);
     }
 
     private void createGoalNotification(long time, NoteFrequency freq, int [] completion){

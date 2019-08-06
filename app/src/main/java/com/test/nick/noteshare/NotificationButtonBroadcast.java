@@ -36,8 +36,11 @@ public class NotificationButtonBroadcast extends BroadcastReceiver {
         }
         else if(action.equals("completed")){
             Intent i = new Intent(MainActivity.ACTION_UPDATE_GOAL);
+            String [] extra = note.extra.split(MainActivity.breakCode);
+            note.extra = Integer.parseInt(extra[0]) + 1 + MainActivity.breakCode + extra[1];
             i.putExtra("note", note);
             LocalBroadcastManager.getInstance(context).sendBroadcast(i);
+            notificationManager.cancelAll();
         }
     }
 }

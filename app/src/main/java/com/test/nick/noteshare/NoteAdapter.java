@@ -103,7 +103,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
                 g.title.setText(data.get(index).title);
                 String [] tempString = data.get(index).extra.split(MainActivity.breakCode);
                 g.runner.setTranslationX(g.runner.getX() + ((float)Integer.parseInt(tempString[0]))/Integer.parseInt(tempString[1]) * 200);
-                g.completion.setText(tempString[1] + " more times this " + data.get(index).body.split(MainActivity.breakCode)[0]);
+                g.completion.setText(Integer.parseInt(tempString[1])- Integer.parseInt(tempString[0]) + " more times this " + data.get(index).body.split(MainActivity.breakCode)[0]);
                 break;
         }
 

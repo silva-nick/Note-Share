@@ -78,8 +78,8 @@ public class GoalEditActivity extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                dateButton.setText(dayOfMonth + "/"
-                                        + (monthOfYear + 1) + "/" + year);
+                                dateButton.setText(monthOfYear+1 + "/"
+                                        + dayOfMonth + "/" + year);
                             }
                         }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 dateDialog.getDatePicker().setMinDate(System.currentTimeMillis());
