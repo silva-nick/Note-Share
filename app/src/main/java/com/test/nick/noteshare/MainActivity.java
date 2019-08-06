@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v){
                 //add checknote and append to text
                 testNote.type = 1;
-                testNote.body = "tFinish the app";
+                testNote.body = "fNew note";
                 bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v) - 1, 4);
             }
@@ -263,6 +263,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v){
                 //add event and append to text
                 testNote.type = 3;
+                testNote.extra = "0" + breakCode + "1";
                 bigData.insert(testNote);
                 layout.removeViews(layout.indexOfChild(v) - 3, 4);
             }

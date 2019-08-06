@@ -1,21 +1,31 @@
 package com.test.nick.noteshare;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.test.nick.noteshare.data.Note;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
@@ -42,17 +52,18 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
                 return new CheckViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.check_note, viewGroup, false));
             case 2:
-                return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
+                return new EventViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.event_note, viewGroup, false));
             case 3:
-                return new ViewHolder((CardView)LayoutInflater.from(viewGroup.getContext())
+                return new GoalViewHolder((CardView)LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.goal_note, viewGroup, false));
             default:
-                return new ViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
+                return new StickyViewHolder((CardView) LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.sticky_note, viewGroup, false));
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int index) {
         switch (viewHolder.getItemViewType()){
@@ -74,7 +85,26 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
                 }
                 break;
             case 2:
-
+                EventViewHolder e = (EventViewHolder)viewHolder;
+                e.title.setText(data.get(index).title);
+                String [] temp = data.get(index).body.split(MainActivity.breakCode);
+                if(!temp[0].equals("")){
+                    String [] s = temp[0].split("/");
+                    e.date.setText(s[1]);
+                    e.time.setText(temp[1]);
+                } else {
+                    LocalDateTime dt = LocalDateTime.now();
+                    e.date.setText(dt.now().getDayOfMonth() + "");
+                    e.time.setText(dt.now().getHour() + ":" + dt.now().getMinute());
+                }
+                break;
+            case 3:
+                GoalViewHolder g = (GoalViewHolder)viewHolder;
+                g.title.setText(data.get(index).title);
+                String [] tempString = data.get(index).extra.split(MainActivity.breakCode);
+                g.runner.setTranslationX(g.runner.getX() + ((float)Integer.parseInt(tempString[0]))/Integer.parseInt(tempString[1]) * 200);
+                g.completion.setText(tempString[1] + " more times this " + data.get(index).body.split(MainActivity.breakCode)[0]);
+                break;
         }
 
     }
@@ -130,7 +160,27 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         }
     }
 
+    private class EventViewHolder extends NoteAdapter.ViewHolder{
+        private TextView date;
+        private TextView time;
 
+        EventViewHolder(CardView view){
+            super(view);
+            date = view.findViewById(R.id.event_note_date);
+            time = view.findViewById(R.id.event_note_time);
+        }
+    }
+
+    private class GoalViewHolder extends NoteAdapter.ViewHolder{
+        private ImageView runner;
+        private TextView completion;
+
+        GoalViewHolder(CardView view){
+            super(view);
+            runner = view.findViewById(R.id.goal_runner);
+            completion = view.findViewById(R.id.goal_completion);
+        }
+    }
 
 
 

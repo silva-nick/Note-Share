@@ -46,22 +46,22 @@ public class GoalEditActivity extends AppCompatActivity {
         note = getIntent().getParcelableExtra("note");
 
         ((EditText)findViewById(R.id.goal_title)).setText(note.title);
-        Log.d(TAG, "onCreate: wwwwwwww " + note.body);
+
         if(!note.body.equals("")){
             String[] bodyArray = note.body.split(MainActivity.breakCode);
             ((Spinner)findViewById(R.id.goal_time_spinner)).setSelection(adapter.getPosition(bodyArray[0]));
-            ((Spinner)findViewById(R.id.goal_freq_spinner)).setSelection(adapter.getPosition(bodyArray[1]));
+            ((Spinner)findViewById(R.id.goal_freq_spinner)).setSelection(adapter1.getPosition(bodyArray[1]));
             ((Button)findViewById(R.id.goal_date)).setText(bodyArray[2]);
         }
+
         if(!note.extra.equals("")){
             completion[0] = Integer.parseInt(note.extra.split(MainActivity.breakCode)[0]);
             completion[1] = Integer.parseInt(note.extra.split(MainActivity.breakCode)[1]);
         } else {
-            completion[0] = 5;
+            completion[0] = 0;
             completion[1] = 6;
         }
-        completion[0] = 6;
-        completion[1] = 6;
+
         float runnerX = 800 * ((float)completion[0]/(float)completion[1]);
         (findViewById(R.id.goal_runner)).animate().translationX(runnerX)
                 .setDuration(1000).setInterpolator(new DecelerateInterpolator());
