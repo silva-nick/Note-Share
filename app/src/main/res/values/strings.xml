@@ -14,6 +14,10 @@
     <string name="event_description">Describe the event here..</string>
     <string name="event_create">Create Event</string>
     <string name="event_importance">How important is your event?: </string>
+    <string name="goal_title">Name your Goal</string>
+    <string name="goal_time">Times a </string>
+    <string name="goal_date">Start date</string>
+    <string name="goal_start">Begin!</string>
     <string name="share_nfc">Tap to share this note!</string>
 </resources>
 
